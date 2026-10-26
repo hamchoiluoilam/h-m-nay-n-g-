@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Roulette - Ăn Gì Hôm Nay? (CF Edition & Vòng Quay 30 Món)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .hard-shadow { box-shadow: 3px 3px 0px #000000; }
+    .hard-shadow-lg { box-shadow: 5px 5px 0px #000000; }
+    
+    /* 3D Flip System */
+    .card-scene {
+      perspective: 800px;
+    }
+    .cf-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+    .cf-card-inner.is-flipped {
+      transform: rotateY(180deg);
+    }
+    .cf-card-front, .cf-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 12px;
+    }
+    .cf-card-front {
+      transform: rotateY(180deg);
+    }
+
+    /* 10 Cards Shuffle Animation */
+    @keyframes shuffleDeckWave {
+      0% { transform: scale(1) translateY(0); }
+      50% { transform: scale(0.92) translateY(-6px) rotate(2deg); filter: blur(0.8px); }
+      100% { transform: scale(1) translateY(0); }
+    }
+    .is-shuffling-deck {
+      animation: shuffleDeckWave 0.22s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    /* VIP Gold Aura Glow */
+    @keyframes goldGlowEffect {
+      0%, 100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.7); border-color: #ffd700; }
+      50% { box-shadow: 0 0 25px rgba(255, 215, 0, 1); border-color: #ffffff; }
+    }
+    .vip-gold-glow {
+      animation: goldGlowEffect 1.2s infinite ease-in-out;
+    }
+
+    /* Modal Pop Animation */
+    @keyframes modalPop {
+      0% { transform: scale(0.8) translateY(20px); opacity: 0; }
+      100% { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .modal-animate {
+      animation: modalPop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .card-swipe-right { transform: translateX(120%) rotate(20deg) !important; opacity: 0 !important; transition: all 0.35s ease; }
+    .card-swipe-left { transform: translateX(-120%) rotate(-20deg) !important; opacity: 0 !important; transition: all 0.35s ease; }
+  </style>
+</head>
+<body class="bg-[#090a0f] text-white font-sans antialiased min-h-screen flex flex-col items-center justify-center p-2 sm:p-4 selection:bg-[#ffd700] selection:text-black">
+
+  <!-- Header Navigation -->
+  <div class="w-full max-w-sm mb-2 flex items-center justify-between px-1">
+    <div class="flex items-center space-x-1.5">
+      <span class="w-2.5 h-2.5 rounded-full bg-[#ffd700] animate-ping"></span>
+      <span class="text-xs uppercase tracking-wider font-black text-[#ffd700]">DB: 300 MÓN ĂN</span>
+    </div>
+    <div class="flex space-x-1 text-xs">
+      <button onclick="switchView('cf-cards')" id="nav-cf" class="px-2.5 py-1 rounded-lg font-black bg-[#ffd700] text-black hard-shadow">
+        🃏 Lật 10 Thẻ CF
+      </button>
+      <button onclick="switchView('roulette')" id="nav-roulette" class="px-2.5 py-1 rounded-lg font-black bg-[#1b1f2b] text-gray-300">
+        🎡 Vòng Quay 30 Món
+      </button>
+      <button onclick="switchView('swipe')" id="nav-swipe" class="px-2.5 py-1 rounded-lg font-black bg-[#1b1f2b] text-gray-300">
+        🔥 Quẹt
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Viewport Frame -->
+  <div class="w-full max-w-sm bg-[#12151f] border-4 border-black rounded-[38px] p-3.5 hard-shadow-lg relative overflow-hidden flex flex-col h-[720px]">
+    
+    <!-- Top Status Bar -->
+    <div class="flex justify-between items-center mb-1.5">
+      <div>
+        <h1 class="text-base font-black tracking-tight text-white flex items-center space-x-1.5">
+          <span>Hôm Nay Ăn Gì?</span>
+          <span class="text-[10px] px-1.5 py-0.5 bg-[#e63946] text-white rounded font-black tracking-wider">GEN Z</span>
+        </h1>
+        <p class="text-[11px] text-gray-400" id="currentSubtitle">Bốc ngẫu nhiên từ kho 300 món ăn</p>
+      </div>
+      <div class="bg-[#1e2332] border-2 border-black rounded-xl px-2 py-0.5 text-xs font-black text-[#ffd700] hard-shadow flex items-center space-x-1">
+        <span>⚡</span>
+        <span>300 Món</span>
+      </div>
+    </div>
+
+    <!-- Category Pills Slider -->
+    <div class="mb-2">
+      <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
+        <button onclick="filterCategory('all', this)" class="cat-pill active px-3 py-1.5 rounded-xl font-bold bg-[#ffd700] text-black border-2 border-black hard-shadow flex-shrink-0">
+          🔥 Tất Cả (300)
+        </button>
+        <button onclick="filterCategory('nuoc', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
+          🍜 Đồ Nước (60)
+        </button>
+        <button onclick="filterCategory('kho', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
+          🍚 Cơm & Khô (60)
+        </button>
+        <button onclick="filterCategory('ngoai', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
+          🌏 Món Ngoại (70)
+        </button>
+        <button onclick="filterCategory('vat', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
+          🧋 Ăn Vặt (70)
+        </button>
+        <button onclick="filterCategory('healthy', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
+          🥗 Healthy (40)
+        </button>
+      </div>
+    </div>
+
+    <!-- 1. VIEW: LẬT 10 THẺ BÀI CF (5 CỘT X 2 HÀNG) -->
+    <div id="cfSection" class="flex-1 flex flex-col justify-between py-1 select-none">
+      <div class="text-center mb-1">
+        <span id="cfInstructionBadge" class="px-3 py-0.5 bg-[#e63946] text-white text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block">
+          ⚡ BẤM NÚT ĐỂ TRÁO 10 LÁ BÀI
+        </span>
+        <p class="text-[11px] text-gray-300 mt-1" id="cfSubInstruction">Tráo 10 lá bài bí ẩn từ kho 300 món rồi chạm chọn 1 lá!</p>
+      </div>
+
+      <!-- 10 CARDS GRID -->
+      <div id="cfCardsGrid" class="grid grid-cols-5 gap-1.5 my-auto px-0.5">
+        <!-- Injected by JavaScript -->
+      </div>
+
+      <div class="w-full px-1 mt-1">
+        <div id="cfChosenResult" class="text-center text-xs font-black text-[#ffd700] mb-1.5 h-5 flex items-center justify-center"></div>
+        <button id="cfActionBtn" onclick="startCFShuffle()" class="w-full py-3.5 bg-gradient-to-r from-[#ffd700] via-[#ffbe0b] to-[#fb5607] text-black font-black text-xs uppercase rounded-xl border-3 border-black hard-shadow hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center space-x-1.5">
+          <span>🌪️ TRÁO 10 THẺ BÁU VẬT (CF)</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. VIEW: VÒNG QUAY 30 MÓN TRÊN 1 BÁNH XE -->
+    <div id="rouletteSection" class="flex-1 flex flex-col justify-between py-1 hidden select-none">
+      <div class="text-center">
+        <div class="flex items-center justify-center space-x-1.5">
+          <span class="px-2.5 py-0.5 bg-[#d4ff00] text-black text-[10px] font-black rounded-md border border-black uppercase">
+            30 Món Trên Bánh Xe
+          </span>
+          <button onclick="shuffle30Pool()" class="px-2 py-0.5 bg-[#ff2a85] text-white text-[10px] font-black rounded-md border border-black hard-shadow active:scale-95">
+            🔄 Đổi 30 Món Khác
+          </button>
+        </div>
+        <h2 class="text-lg font-black text-white mt-1">VÒNG QUAY 30 MÓN</h2>
+        <p class="text-[11px] text-gray-400">Tự động nạp 30 món ngẫu nhiên từ kho 300 món</p>
+      </div>
+
+      <div class="relative w-64 h-64 mx-auto my-auto flex items-center justify-center">
+        <div class="absolute -top-3.5 z-20">
+          <div class="w-0 h-0 border-l-[11px] border-l-transparent border-r-[11px] border-r-transparent border-t-[18px] border-t-[#ffd700] filter drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]"></div>
+        </div>
+
+        <canvas id="rouletteCanvas" width="260" height="260" class="rounded-full border-4 border-black hard-shadow-lg bg-[#141824]"></canvas>
+        
+        <div class="absolute w-11 h-11 rounded-full bg-black border-2 border-[#ffd700] flex items-center justify-center text-xs font-black text-[#ffd700] z-10 hard-shadow">
+          30
+        </div>
+      </div>
+
+      <div class="w-full px-1">
+        <button id="spinButton" onclick="startSpinning30()" class="w-full py-3.5 bg-[#ffd700] text-black font-black text-xs uppercase rounded-xl border-3 border-black hard-shadow hover:scale-[1.02] active:scale-95 transition-all">
+          🎰 QUAY VÒNG 30 MÓN
+        </button>
+        <p id="spinResult" class="text-center text-xs text-[#00f0ff] font-black mt-1.5 h-4"></p>
+      </div>
+    </div>
+
+    <!-- 3. VIEW: SWIPE CARDS -->
+    <div id="swipeSection" class="flex-1 flex flex-col justify-between hidden select-none">
+      <div class="relative flex-1 flex items-center justify-center my-0.5">
+        <div class="absolute w-[92%] h-[95%] bg-[#1a1e2b] border-3 border-black rounded-3xl scale-95 opacity-50 translate-y-2"></div>
+        <div id="foodCard" class="absolute w-full h-full bg-[#1c2130] border-3 border-black rounded-3xl overflow-hidden hard-shadow-lg flex flex-col justify-between">
+          <div class="relative h-60 bg-cover bg-center" id="cardImage">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#1c2130] via-black/25 to-black/35"></div>
+            <div class="absolute top-3 left-3 flex space-x-1.5">
+              <span id="cardCategory" class="px-2.5 py-0.5 bg-[#00f0ff] text-black text-xs font-black rounded-lg border-2 border-black hard-shadow">🍜 Đồ Nước</span>
+              <span id="cardPrice" class="px-2.5 py-0.5 bg-[#ffd700] text-black text-xs font-black rounded-lg border-2 border-black hard-shadow">45k - 65k</span>
+            </div>
+            <div class="absolute bottom-2 left-3 right-3">
+              <h2 id="cardTitle" class="text-2xl font-black text-white tracking-tight leading-none drop-shadow-md">Phở Bò Tái Lăn</h2>
+              <p id="cardOrigin" class="text-xs text-[#ffd700] font-bold mt-1">Đặc sản Hà Nội</p>
+            </div>
+          </div>
+          <div class="p-3.5 flex-1 flex flex-col justify-between">
+            <div id="cardTags" class="flex flex-wrap gap-1.5"></div>
+            <div class="flex justify-between items-center bg-black/40 border border-white/10 rounded-xl px-3 py-2">
+              <span class="text-xs text-gray-400" id="cardFillLevel">Độ no: ⭐⭐⭐⭐</span>
+              <span class="text-xs text-gray-400">Thời gian: <strong class="text-[#00f0ff]" id="cardPrepTime">15p</strong></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center justify-center space-x-6 py-1">
+        <button onclick="triggerSwipe('left')" class="w-14 h-14 rounded-2xl bg-[#1c2130] border-3 border-black text-[#ff2a85] text-xl flex items-center justify-center hard-shadow hover:scale-105 active:scale-95 transition-all">❌</button>
+        <button onclick="triggerSwipe('right')" class="w-14 h-14 rounded-2xl bg-[#ffd700] border-3 border-black text-black text-xl flex items-center justify-center hard-shadow hover:scale-105 active:scale-95 transition-all">💚</button>
+      </div>
+    </div>
+
+    <!-- POPUP MODAL: HIỆN HÌNH ẢNH CHUẨN KHI QUAY XONG HOẶC LẬT BÀI -->
+    <div id="winningModal" class="absolute inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden">
+      <div class="w-full bg-[#171b26] border-4 border-black rounded-3xl p-4 hard-shadow-lg relative modal-animate flex flex-col max-h-[95%] overflow-y-auto no-scrollbar">
+        
+        <!-- Close button -->
+        <button onclick="closeWinningModal()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/80 border border-white/20 text-white font-bold flex items-center justify-center hover:bg-[#ff2a85] transition-all z-10">
+          ✕
+        </button>
+
+        <!-- Header Tag -->
+        <div class="text-center mb-2">
+          <span class="px-3 py-0.5 bg-[#ffd700] text-black text-[10px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider">
+            🎉 ĐÃ CHỐT MÓN HÔM NAY!
+          </span>
+          <h2 id="modalDishTitle" class="text-xl font-black text-white mt-1 leading-tight">Phở Bò Tái Lăn</h2>
+          <p id="modalCategoryBadge" class="text-xs text-[#00f0ff] font-bold">🍜 Đồ Nước • 45k - 65k</p>
+        </div>
+
+        <!-- Food Image Container (Loaded with accurate image matching) -->
+        <div class="relative w-full h-48 rounded-2xl overflow-hidden border-2 border-black hard-shadow bg-black/50 mb-3">
+          <img id="modalDishImage" src="" alt="Món ăn" class="w-full h-full object-cover transition-opacity duration-300 opacity-0" onload="this.classList.remove('opacity-0')">
+          <div id="modalImgLoader" class="absolute inset-0 flex items-center justify-center bg-[#131620] text-xs text-gray-400 font-bold">
+            <span class="animate-pulse">Đang tải ảnh chuẩn... 🍲</span>
+          </div>
+          <div class="absolute bottom-2 left-2 px-2 py-0.5 bg-black/75 backdrop-blur-sm rounded-md text-[10px] text-[#ffd700] font-black border border-white/20">
+            Hình ảnh xác thực
+          </div>
+        </div>
+
+        <!-- Food Info Details -->
+        <div class="bg-black/40 border border-white/10 rounded-xl p-2.5 mb-3 space-y-1.5">
+          <div class="flex justify-between text-xs">
+            <span class="text-gray-400">Mức giá:</span>
+            <span id="modalPriceLabel" class="text-[#ffd700] font-bold">45.000đ - 65.000đ</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-gray-400">Đặc trưng:</span>
+            <span id="modalOriginLabel" class="text-white font-semibold">Đặc sản thơm ngon</span>
+          </div>
+          <div class="flex justify-between text-xs">
+            <span class="text-gray-400">Thời gian ăn:</span>
+            <span id="modalTimeLabel" class="text-[#00f0ff] font-bold">15 - 20 phút</span>
+          </div>
+        </div>
+
+        <!-- Action Links: Google Search & Google Maps -->
+        <div class="space-y-1.5">
+          <a id="modalGoogleImgLink" href="#" target="_blank" class="w-full py-2.5 bg-[#1f2537] hover:bg-[#2b334a] text-gray-200 text-xs font-black rounded-xl border border-gray-600 hard-shadow flex items-center justify-center space-x-1.5 transition-all">
+            <span>🔍 Xem Thêm Ảnh Thật Trên Google</span>
+          </a>
+
+          <a id="modalGoogleMapsLink" href="#" target="_blank" class="w-full py-3 bg-[#00f0ff] hover:bg-[#00d4e0] text-black text-xs font-black rounded-xl border-2 border-black hard-shadow flex items-center justify-center space-x-1.5 transition-all">
+            <span>📍 Tìm Quán Gần Bạn Trên Google Maps</span>
+          </a>
+
+          <button onclick="closeWinningModal()" class="w-full py-2.5 bg-[#ffd700] hover:bg-[#e6c200] text-black text-xs font-black rounded-xl border-2 border-black hard-shadow transition-all">
+            ĐỒNG Ý ĐI ĂN MÓN NÀY!
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPLETE 300 DISHES DATABASE & IMAGE ENGINE -->
+  <script>
+    // 1. TẠO DATABASE 300 MÓN CHUẨN VỊ
+    const rawDishNames = {
+      nuoc: [
+        "Phở Bò Tái Lăn", "Phở Gà Đồi Lá Chanh", "Bún Bò Huế Chả Cua", "Hủ Tiếu Nam Vang", "Bún Riêu Cua Ốc Mít",
+        "Bánh Canh Ghẹ", "Bánh Canh Cua Giò Heo", "Bánh Canh Cá Lóc", "Bún Mắm Miền Tây", "Bún Chả Cá Nha Trang",
+        "Bún Mọc Sườn Non", "Mì Quảng Tôm Thịt", "Mì Vịt Tiềm Thuốc Bắc", "Mì Hoành Thánh Xá Xíu", "Miến Lươn Giòn Cay",
+        "Miến Gà Măng Khô", "Mì Ramen Tonkotsu", "Mì Udon Bò Bắp", "Mì Cay Hàn Quốc 7 Cấp", "Lẩu Thái Chua Cay",
+        "Lẩu Gà Lá É Đà Lạt", "Lẩu Riêu Cua Bắp Bò", "Lẩu Nấm Thiên Nhiên", "Cháo Sườn Sụn Ngõ Huyện", "Cháo Ếch Singapore",
+        "Cháo Lòng Đầy Đủ Dồi", "Súp Cua Trứng Bách Thảo", "Bún Dọc Mùng Chân Giò", "Bánh Đa Cua Hải Phòng", "Hủ Tiếu Mực Tươi",
+        "Bún Cá Cay Hải Phòng", "Bún Ốc Chuối Đậu", "Bún Sứa Quy Nhơn", "Bún Bò Tái Gầu", "Phở Bò Sốt Vang",
+        "Phở Trộn Chua Ngọt", "Hủ Tiếu Bò Kho", "Mì Bò Kho Bánh Mì", "Bún Măng Vịt Mắm Gừng", "Bún Gỏi Già Sóc Trăng",
+        "Bánh Canh Bột Xắt", "Bánh Canh Trảng Bàng", "Bún Kèn Kiên Giang", "Bún Cá Rô Đồng", "Bún Bung Hoa Chuối",
+        "Bún Thang Hà Nội", "Miến Cua Bể Nồi Đất", "Cháo Cá Lóc Rau Đắng", "Cháo Hàu Sữa Nóng", "Cháo Bò Bằm Trứng Gà",
+        "Lẩu Bò Nhúng Dấm", "Lẩu Mắm Cá Linh", "Lẩu Hải Sản Tomyum", "Lẩu Ếch Măng Cay", "Lẩu Dê Khô Tàu Bột",
+        "Lẩu Cừu Mông Cổ", "Mì Sủi Cảo Tôm Thịt", "Mì Soba Lạnh Nhật", "Mì Laksa Singapore", "Súp Bào Ngư Vi Cá"
+      ],
+      kho: [
+        "Cơm Tấm Sườn Bì Chả", "Cơm Gà Xối Mỡ Da Giòn", "Cơm Gà Xé Hội An", "Cơm Rang Dưa Bò Phố Cổ", "Cơm Niêu Cá Kho Tộ",
+        "Cơm Thố Xá Xíu Lạp Xưởng", "Cơm Cháy Kho Quẹt Tôm Khô", "Bánh Mì Thịt Nướng Than", "Bánh Mì Chảo Xíu Mại Pate", "Bánh Mì Kebab Thổ Nhĩ Kỳ",
+        "Bún Đậu Mắm Tôm Thập Cẩm", "Bún Chả Nướng Que Tre", "Bún Thịt Nướng Chả Giò", "Bún Thịt Xào Sả Ớt", "Xôi Xéo Gà Xé Hành Phi",
+        "Xôi Mặn Thập Cẩm Chả Lụa", "Bánh Cuốn Nóng Chả Mực", "Bánh Ướt Lòng Gà Đà Lạt", "Bánh Xèo Tôm Nhảy", "Bánh Khọt Tôm Mực Vũng Tàu",
+        "Bún Trộn Bò Nam Bộ", "Hủ Tiếu Khô Sa Đéc", "Mì Trộn Xá Xíu Trứng Cút", "Cơm Chiên Kim Chi Bò", "Cơm Chiên Cá Mặn Gà Xé",
+        "Cơm Chiên Dương Châu", "Cơm Rang Dưa Chua Lòng Bò", "Xôi Khúc Hà Nội Nhân Đậu", "Cơm Lam Gà Nướng Tây Nguyên", "Cơm Heo Quay Bì Giòn",
+        "Cơm Vịt Quay Sốt Tiêu", "Bánh Mì Heo Quay Giòn Rụm", "Bánh Mì Chả Cá Nha Trang", "Bánh Mì Bò Kho", "Bánh Mì Xíu Mại Trứng Muối",
+        "Bún Bắp Bò Xào Cần Tỏi", "Bún Nem Rán Hà Nội", "Bún Thịt Nướng Tôm Lụi", "Xôi Bắp Mỡ Hành Đậu Xanh", "Xôi Vò Hạt Sen Bùi Béo",
+        "Bánh Bèo Chén Tôm Chấy", "Bánh Nậm Lá Chuối Nóng", "Bánh Lọc Tôm Thịt Huế", "Bánh Hỏi Thịt Nướng Kim Tiền", "Bánh Căn Trứng Cút Đà Lạt",
+        "Cơm Thố Bò Áp Chảo", "Cơm Đùi Gà Nướng Mật Ong", "Cơm Thịt Kho Tàu Nước Dừa", "Cơm Cá Ba Sa Kho Tộ", "Cơm Sườn Non Rim Mặn",
+        "Cơm Mực Nhồi Thịt Sốt Cà", "Cơm Bò Xào Bông Cải", "Cơm Chiên Tỏi Trứng Muối", "Cơm Chiên Lá Cẩm Hải Sản", "Mì Trộn Muối Ớt Tôm Bò",
+        "Mì Xào Giòn Hải Sản", "Hủ Tiếu Xào Bò Áp Chảo", "Phở Xào Bắp Bò Cần Tỏi", "Miến Xào Cua Bể", "Miến Xào Lòng Gà Trứng Non"
+      ],
+      ngoai: [
+        "Gà Rán Phô Mai K-Food", "Cơm Trộn Bibimbap Thố Đá", "Lẩu Tokbokki Phô Mai", "Canh Kim Chi Thịt Heo", "Kimbap Chiên Xù Giòn",
+        "Mì Tương Đen Jajangmyeon", "Sushi & Sashimi Cá Hồi", "Cơm Cà Ri Bò Nhật Bản", "Cơm Lươn Nướng Teriyaki", "Bánh Bạch Tuộc Takoyaki",
+        "Cơm Thịt Chiên Tonkatsu", "Pad Thai Tôm Tươi", "Canh Tom Yum Kung Tôm Càng", "Cơm Chiên Trái Thơm", "Gỏi Đu Đủ Som Tum",
+        "Xôi Xoài Nước Cốt Dừa", "Pizza Hải Sản Sốt Pesto", "Pizza Bò Pepperoni", "Mì Ý Sốt Bò Bolognese", "Mì Ý Sốt Kem Carbonara",
+        "Burger Bò Phô Mai Tan Chảy", "Steak Thăn Bò Mỹ Sốt Tiêu", "Sườn Nướng Khổng Lồ BBQ", "Dimsum Há Cảo Tôm", "Xíu Mại Tôm Thịt Trứng Cút",
+        "Vịt Quay Bắc Kinh Cuốn Bánh", "Mì Bò Hầm Đài Loan", "Bánh Bao Kim Sa Trứng Muối", "Cà Ri Gà Bơ Bánh Naan", "Cơm Biriayani Cừu Ấn Độ",
+        "Taco Bò Cay Mexico", "Bánh Mì Kebab Thổ Nhĩ Kỳ", "Cơm Đùi Gà Teriyaki", "Mì Cay Bạch Tuộc Phô Mai", "Cá Hồi Nướng Bơ Chanh",
+        "Mì Soba Xào Yakisoba", "Cơm Donburi Trứng Gà Oyakodon", "Lẩu Shabu Shabu Nhật Bản", "Lẩu Sukiyaki Bò Wagyu", "Thịt Nướng Samgyeopsal Hàn",
+        "Mì Lạnh Naengmyeon Hàn", "Cơm Gà Hải Nam Singapore", "Hủ Tiếu Xào Char Kway Teow", "Cà Ri Xanh Gà Nước Cốt Dừa", "Cơm Nếp Cốt Dừa Nasi Lemak",
+        "Mì Ramen Cay Miso Hầm", "Salad Caesar Thịt Xông Khói", "Bò Hầm Rượu Vang Pháp", "Bánh Mì Kẹp Xúc Xích Hotdog", "Sườn Cừu Nướng Lá Thơm",
+        "Pizza 4 Loại Phô Mai Mật Ong", "Mì Ý Mực Đen Hải Sản", "Cơm Chiên Kimchi Phô Mai", "Bánh Kếp Crepe Chuối Nutella", "Bánh Tacos Gà Giòn Sốt Mayo",
+        "Burrito Thịt Bò Cuộn Phô Mai", "Quesadilla Phô Mai Nướng Giòn", "Gà Hấp Muối Quảng Đông", "Đậu Phụ Tứ Xuyên Ma Po", "Heo Quay Giòn Bì Macao",
+        "Mì Kéo Lan Châu Thịt Bò", "Cơm Niêu Cơm Cháy Singapore", "Mì Hoành Thánh Tôm Giòn Hong Kong", "Bánh Xếp Gyoza Áp Chảo", "Bò Lúc Lắc Kiểu Pháp",
+        "Mì Ý Tôm Sốt Kem Bơ Tỏi", "Lasagna Bò Bút Phô Mai", "Cơm Risotto Nấm Ý", "Bánh Tiramisu Ý Cacao", "Gà Tikka Masala Đậm Vị"
+      ],
+      vat: [
+        "Trà Sữa Trân Châu Đường Đen", "Trà Đào Cam Sả Hạt Chia", "Trà Mãng Cầu Tươi Dầm Đá", "Bánh Tráng Nướng Trứng Đà Lạt", "Bánh Tráng Trộn Bò Khô",
+        "Bánh Tráng Cuốn Bơ Sốt Me", "Ốc Hương Xào Trứng Muối", "Ốc Móng Tay Xào Muống Tỏi", "Càng Ghẹ Rang Muối Ớt", "Nem Chua Rán Hà Nội",
+        "Cá Viên Chiên Mắm Tỏi Ớt", "Bắp Xào Tép Bơ Mỡ Hành", "Chè Khúc Bạch Hạnh Nhân", "Chè Bưởi An Giang", "Tàu Hũ Trân Châu Gừng Nóng",
+        "Gỏi Cuốn Tôm Thịt Tươi", "Chân Gà Sả Tắc Cay Nồng", "Khoai Lang Kén Chiên Mè", "Kem Bơ Sầu Riêng Đà Lạt", "Bánh Chuối Chiên Phồng Giòn",
+        "Xiên Bẩn Cổng Trường Đầy Đủ", "Bánh Giò Nóng Thịt Nấm", "Hột Vịt Lộn Xào Me", "Trà Sữa Oolong Nướng", "Sinh Tố Bơ Đậm Đặc",
+        "Bánh Rán Mật Đường Phố Cổ", "Bánh Tiêu Sữa Đậu Nành", "Bánh Quẩy Nóng Giòn Tan", "Bánh Khoai Mỡ Chiên Giòn", "Khoai Tây Lắc Phô Mai Bột",
+        "Gà Popcorn Lắc Phô Mai", "Bánh Đồng Xu Phô Mai Kéo Sợi", "Bánh Trứng Gà Non Hong Kong", "Kem Gelato Ý Đủ Vị", "Sữa Chua Dẻo Trái Cây",
+        "Sữa Chua Trân Châu Hạ Long", "Chè Thái Sầu Riêng Ngập Topping", "Chè Dừa Dầm Hải Phòng", "Chè Sương Sa Hạt Lựu", "Trà Chanh Giã Tay Quảng Đông",
+        "Trà Tắc Xí Muội Mát Lạnh", "Trà Dâu Tằm Dầm Đá", "Bánh Bột Lọc Chiên Giòn", "Trứng Cút Lộn Xào Me", "Súp Bong Bóng Cá Nóng",
+        "Bò Bía Ngọt Giòn Cơm Dừa", "Bánh Kẹp Lá Dứa Nóng Hổi", "Xôi Chiên Phồng Chà Bông", "Cá Tai Tượng Chiên Xù", "Hàu Nướng Mỡ Hành Đậu Phộng",
+        "Sò Điệp Nướng Trứng Cút", "Bạch Tuộc Nướng Sa Tế", "Mực Nướng Muối Ớt Xé Sợi", "Nem Nướng Nha Trang Cuốn Bánh", "Chả Ram Tôm Đất Giòn Rụm",
+        "Bánh Tráng Chấm Mỡ Hành Trứng Cút", "Bánh Tráng Xì Ke Muối Tỏi", "Xoài Lắc Muối Tôm", "Cóc Bao Tử Dầm Chua Ngọt", "Mận Lắc Muối Tây Ninh",
+        "Ổi Bo Dầm Xí Muội", "Bánh Mì Nướng Muối Ớt", "Bánh Donut Phủ Socola", "Bánh Su Kem Vani Mát Lạnh", "Chè Bánh Trôi Nước Đường Mật",
+        "Chè Đậu Đỏ Nước Cốt Dừa", "Trà Sữa Khoai Môn Dẻo", "Cà Phê Muối Xứ Huế", "Cà Phê Trứng Béo Ngậy", "Trà Hoa Cúc Mật Ong Nóng"
+      ],
+      healthy: [
+        "Salad Ức Gà Sốt Mè Rang", "Poke Bowl Cá Hồi Quả Bơ", "Cơm Gạo Lứt Bò Áp Chảo", "Bún Gạo Lứt Trộn Ức Gà", "Bánh Mì Đen Quả Bơ Trứng Chần",
+        "Gỏi Cuốn Chay Nấm Đậu Hũ", "Salad Tôm Nướng Giấm Balsamic", "Cháo Yến Mạch Ức Gà Xé", "Bún Nấm Chay Thanh Đạm", "Smoothie Bowl Chuối Việt Quất",
+        "Cơm Gạo Lứt Cá Hồi Áp Chảo", "Súp Bí Đỏ Hạt Sen Nấu Nấm", "Bún Chả Nấm Chay Nướng", "Canh Rong Biển Đậu Hũ Thịt Bằm", "Salad Cá Ngừ Ngô Ngọt",
+        "Cơm Gạo Lứt Gà Nướng Teriyaki", "Miến Dong Trộn Rau Củ Chay", "Bánh Mì Đen Bơ Đậu Phộng Chuối", "Súp Lơ Xanh Luộc Chấm Trứng Dầm", "Canh Cải Cúc Thịt Nạc",
+        "Canh Mướp Nấu Tôm Tươi", "Cháo Đậu Xanh Thịt Bằm", "Cháo Yến Mạch Hạt Chia Sữa Tươi", "Salad Bơ Trứng Gà Sốt Chanh Dây", "Gỏi Ngó Sen Tôm Thịt Ít Béo",
+        "Cơm Gạo Lứt Ức Gà Xào Nấm", "Cơm Chay Thập Cẩm Rau Nấm", "Bún Đậu Hũ Kho Nấm Rơm", "Hủ Tiếu Chay Nước Lèo Củ Quả", "Bánh Canh Nấm Chay Nước Trong",
+        "Canh Chua Chay Bạc Hà Đậu Bắp", "Chả Lụa Chay Cuốn Rau Mầm", "Đậu Hũ Hấp Rau Củ Nước Tương", "Bông Cải Xào Ức Gà Dầu Oliu", "Salad Ức Gà Sốt Sữa Chua Hy Lạp",
+        "Poke Bowl Tôm Luộc Quả Bơ", "Cơm Lứt Trộn Rau Củ Cầu Vồng", "Canh Bí Đao Nấu Tôm Giảm Cân", "Bún Tươi Nước Dùng Rau Củ Quả", "Súp Nấm Tuyết Hạt Sen Chay"
+      ]
+    };
+
+    // Bản đồ ảnh chuẩn chính xác từng nhóm món (Curated Food Photos)
+    const foodImageDictionary = {
+      "Phở": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=700&q=80",
+      "Bún Bò": "https://images.unsplash.com/photo-1594998893017-36147cbcae05?auto=format&fit=crop&w=700&q=80",
+      "Hủ Tiếu": "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=700&q=80",
+      "Bún Riêu": "https://images.unsplash.com/photo-1617093727343-374698b1b08d?auto=format&fit=crop&w=700&q=80",
+      "Ramen": "https://images.unsplash.com/photo-1557872943-16a5ac26437e?auto=format&fit=crop&w=700&q=80",
+      "Udon": "https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=700&q=80",
+      "Lẩu": "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=700&q=80",
+      "Cháo": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80",
+      "Cơm Tấm": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80",
+      "Cơm Gà": "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=700&q=80",
+      "Cơm Chiên": "https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=700&q=80",
+      "Bánh Mì": "https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=700&q=80",
+      "Bún Đậu": "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=700&q=80",
+      "Bún Chả": "https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=700&q=80",
+      "Xôi": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=700&q=80",
+      "Bánh Xèo": "https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=700&q=80",
+      "Gà Rán": "https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=700&q=80",
+      "Pizza": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=700&q=80",
+      "Sushi": "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=700&q=80",
+      "Burger": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=700&q=80",
+      "Mì Ý": "https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=700&q=80",
+      "Trà Sữa": "https://images.unsplash.com/photo-1558857563-b37cf5a3c103?auto=format&fit=crop&w=700&q=80",
+      "Bánh Tráng": "https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=700&q=80",
+      "Ốc": "https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=700&q=80",
+      "Salad": "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=700&q=80",
+      "Poke": "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=700&q=80"
+    };
+
+    function getAccurateDishImage(dishName) {
+      for (const [key, url] of Object.entries(foodImageDictionary)) {
+        if (dishName.includes(key)) {
+          return url;
+        }
+      }
+      return "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=700&q=80";
+    }
+
+    // 2. KHỞI TẠO 300 MÓN VÀO MẢNG CHUNG
+    const fullDatabase300 = [];
+    let idCounter = 1;
+    const catDisplayNames = {
+      nuoc: '🍜 Đồ Nước', kho: '🍚 Cơm & Khô', ngoai: '🌏 Món Ngoại', vat: '🧋 Ăn Vặt', healthy: '🥗 Healthy'
+    };
+
+    for (const [catKey, nameList] of Object.entries(rawDishNames)) {
+      nameList.forEach((dishName, idx) => {
+        fullDatabase300.push({
+          id: idCounter++,
+          cat: catKey,
+          catName: catDisplayNames[catKey],
+          name: dishName,
+          price: (35 + (idx % 7) * 10) + 'k - ' + (55 + (idx % 7) * 15) + 'k',
+          origin: catDisplayNames[catKey] + ' • Món ngon tuyển chọn',
+          fill: (idx % 3 === 0) ? '⭐⭐⭐⭐⭐' : (idx % 2 === 0 ? '⭐⭐⭐⭐' : '⭐⭐⭐'),
+          time: (10 + (idx % 4) * 5) + 'p',
+          img: getAccurateDishImage(dishName)
+        });
+      });
+    }
+
+    let currentFilter = 'all';
+    let filteredList = [...fullDatabase300];
+    let cfTenDishes = [];
+    let isCFShuffling = false;
+    let hasPickedCard = false;
+
+    // 3. SOUND SYNTHESIZER (Web Audio API - Không phụ thuộc file mp3 ngoài)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playTickSound() {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.04);
+      } catch (e) {}
+    }
+
+    function playWinSound() {
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const notes = [440, 554.37, 659.25, 880];
+        notes.forEach((freq, idx) => {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.08);
+          gain.gain.setValueAtTime(0.2, audioCtx.currentTime + idx * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + idx * 0.08 + 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(audioCtx.currentTime + idx * 0.08);
+          osc.stop(audioCtx.currentTime + idx * 0.08 + 0.35);
+        });
+      } catch (e) {}
+    }
+
+    // 4. MODAL CHIẾN THẮNG & FETCH ẢNH CHUẨN TỪ WIKIPEDIA / GOOGLE
+    async function showWinningModal(dish) {
+      playWinSound();
+      const modal = document.getElementById('winningModal');
+      const title = document.getElementById('modalDishTitle');
+      const catBadge = document.getElementById('modalCategoryBadge');
+      const img = document.getElementById('modalDishImage');
+      const loader = document.getElementById('modalImgLoader');
+      const price = document.getElementById('modalPriceLabel');
+      const origin = document.getElementById('modalOriginLabel');
+      const time = document.getElementById('modalTimeLabel');
+      const ggImgLink = document.getElementById('modalGoogleImgLink');
+      const ggMapsLink = document.getElementById('modalGoogleMapsLink');
+
+      title.innerText = dish.name;
+      catBadge.innerText = `${dish.catName} • ${dish.price}`;
+      price.innerText = dish.price;
+      origin.innerText = dish.origin;
+      time.innerText = dish.time;
+
+      // Link Google Images & Maps trực tiếp
+      ggImgLink.href = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(dish.name)}`;
+      ggMapsLink.href = `https://www.google.com/maps/search/${encodeURIComponent(dish.name + ' gần đây')}`;
+
+      // Reset image state
+      img.classList.add('opacity-0');
+      loader.classList.remove('hidden');
+      modal.classList.remove('hidden');
+
+      // Ảnh mặc định chính xác theo dictionary
+      let selectedImage = dish.img;
+
+      // Thử truy vấn Wikipedia tiếng Việt để lấy ảnh bách khoa chuẩn xác nhất
+      try {
+        const queryTerm = dish.name.split(" ")[0] + " " + (dish.name.split(" ")[1] || "");
+        const wikiRes = await fetch(`https://vi.wikipedia.org/w/api.php?action=query&prop=pageimages&format=json&piprop=original&titles=${encodeURIComponent(queryTerm)}&origin=*`);
+        const data = await wikiRes.json();
+        const pages = data.query ? data.query.pages : null;
+        if (pages) {
+          const firstPage = Object.values(pages)[0];
+          if (firstPage && firstPage.original && firstPage.original.source) {
+            selectedImage = firstPage.original.source;
+          }
+        }
+      } catch (err) {
+        // Fallback to dictionary image
+      }
+
+      img.src = selectedImage;
+      img.onload = () => {
+        loader.classList.add('hidden');
+        img.classList.remove('opacity-0');
+      };
+      img.onerror = () => {
+        img.src = dish.img;
+        loader.classList.add('hidden');
+        img.classList.remove('opacity-0');
+      };
+    }
+
+    function closeWinningModal() {
+      document.getElementById('winningModal').classList.add('hidden');
+    }
+
+    // 5. LẬT 10 THẺ BÀI CF (5x2 GRID)
+    function build10CardsGrid() {
+      const container = document.getElementById('cfCardsGrid');
+      let html = '';
+      for (let i = 0; i < 10; i++) {
+        html += `
+          <div class="card-scene h-28 cursor-pointer" onclick="onCard10Click(${i})">
+            <div class="cf-card-inner" id="cardInner-${i}">
+              <div class="cf-card-back bg-gradient-to-br from-[#1a1c27] to-[#0b0c12] border-2 border-[#ffd700] hard-shadow flex flex-col items-center justify-center p-1 text-center overflow-hidden">
+                <div class="w-7 h-7 rounded-full border border-[#ffd700] bg-black/70 flex items-center justify-center text-sm mb-0.5 shadow-inner">🔥</div>
+                <span class="text-[9px] font-black text-[#ffd700] uppercase tracking-wider">CF</span>
+                <span class="text-[8px] text-gray-400 font-mono">#${i+1}</span>
+              </div>
+              <div class="cf-card-front bg-[#1c2232] border-2 border-white hard-shadow flex flex-col overflow-hidden" id="cardFront-${i}">
+                <div class="h-14 bg-cover bg-center" id="cardImg-${i}"></div>
+                <div class="p-1 flex-1 flex flex-col justify-between">
+                  <div class="text-[9.5px] font-black text-white leading-tight line-clamp-2" id="cardTitle-${i}">Món</div>
+                  <div class="text-[8.5px] text-[#ffd700] font-black" id="cardPrice-${i}">45k</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      container.innerHTML = html;
+      load10CardsData();
+    }
+
+    function load10CardsData() {
+      const shuffled = [...filteredList].sort(() => 0.5 - Math.random());
+      cfTenDishes = shuffled.slice(0, 10);
+
+      for (let i = 0; i < 10; i++) {
+        const dish = cfTenDishes[i] || filteredList[0];
+        document.getElementById(`cardTitle-${i}`).innerText = dish.name;
+        document.getElementById(`cardPrice-${i}`).innerText = dish.price;
+        document.getElementById(`cardImg-${i}`).style.backgroundImage = `url('${dish.img}')`;
+        
+        const inner = document.getElementById(`cardInner-${i}`);
+        inner.classList.remove('is-flipped');
+        inner.parentElement.classList.remove('vip-gold-glow');
+        inner.parentElement.style.opacity = '1';
+      }
+
+      hasPickedCard = false;
+      document.getElementById('cfInstructionBadge').innerText = "⚡ BẤM NÚT ĐỂ TRÁO 10 LÁ BÀI";
+      document.getElementById('cfInstructionBadge').className = "px-3 py-0.5 bg-[#e63946] text-white text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block";
+      document.getElementById('cfSubInstruction').innerText = "Tráo 10 lá bài bí ẩn từ kho 300 món rồi chạm chọn 1 lá!";
+      document.getElementById('cfChosenResult').innerText = "";
+    }
+
+    function startCFShuffle() {
+      if (isCFShuffling) return;
+      isCFShuffling = true;
+      hasPickedCard = false;
+      playTickSound();
+
+      for (let i = 0; i < 10; i++) {
+        document.getElementById(`cardInner-${i}`).classList.remove('is-flipped');
+        document.getElementById(`cardInner-${i}`).parentElement.classList.remove('vip-gold-glow');
+        document.getElementById(`cardInner-${i}`).parentElement.style.opacity = '1';
+      }
+
+      const grid = document.getElementById('cfCardsGrid');
+      grid.classList.add('is-shuffling-deck');
+
+      const btn = document.getElementById('cfActionBtn');
+      btn.disabled = true;
+      btn.innerText = "🌪️ ĐANG TRÁO 10 LÁ BÀI TỐC ĐỘ CAO...";
+      document.getElementById('cfInstructionBadge').innerText = "⏳ ĐANG TRÁO 10 LÁ BÁU VẬT...";
+
+      const shuffleTicker = setInterval(playTickSound, 120);
+
+      setTimeout(() => {
+        clearInterval(shuffleTicker);
+        grid.classList.remove('is-shuffling-deck');
+        
+        const shuffled = [...filteredList].sort(() => 0.5 - Math.random());
+        cfTenDishes = shuffled.slice(0, 10);
+        for (let i = 0; i < 10; i++) {
+          const dish = cfTenDishes[i] || filteredList[0];
+          document.getElementById(`cardTitle-${i}`).innerText = dish.name;
+          document.getElementById(`cardPrice-${i}`).innerText = dish.price;
+          document.getElementById(`cardImg-${i}`).style.backgroundImage = `url('${dish.img}')`;
+        }
+
+        isCFShuffling = false;
+        btn.disabled = false;
+        btn.innerText = "👉 CHỌN 1 TRONG 10 LÁ BÀI TRÊN MÀN HÌNH!";
+        
+        document.getElementById('cfInstructionBadge').innerText = "🎯 CHẠM VÀO 1 LÁ BÀI ĐỂ LẬT!";
+        document.getElementById('cfInstructionBadge').className = "px-3 py-0.5 bg-[#ffd700] text-black text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block animate-bounce";
+        document.getElementById('cfSubInstruction').innerText = "Linh cảm mách bảo bạn chọn lá bài nào?";
+      }, 1000);
+    }
+
+    function onCard10Click(index) {
+      if (isCFShuffling || hasPickedCard) return;
+      hasPickedCard = true;
+
+      const chosenDish = cfTenDishes[index];
+      const targetCard = document.getElementById(`cardInner-${index}`);
+      
+      targetCard.classList.add('is-flipped');
+      targetCard.parentElement.classList.add('vip-gold-glow');
+
+      document.getElementById('cfInstructionBadge').className = "px-3 py-0.5 bg-[#00f0ff] text-black text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block";
+      document.getElementById('cfInstructionBadge').innerText = "🎉 BÁU VẬT ĐÃ MỞ!";
+      document.getElementById('cfChosenResult').innerHTML = `ĐÃ TRÚNG: <span class="text-[#ffd700] underline font-black ml-1">${chosenDish.name}</span>!`;
+
+      // Sau 700ms, tự động hé mở 9 lá bài còn lại
+      setTimeout(() => {
+        for (let i = 0; i < 10; i++) {
+          if (i !== index) {
+            document.getElementById(`cardInner-${i}`).classList.add('is-flipped');
+            document.getElementById(`cardInner-${i}`).parentElement.style.opacity = '0.7';
+          }
+        }
+        document.getElementById('cfActionBtn').innerText = "🔄 TRÁO LẠI 10 LÁ MỚI";
+        
+        // Hiện Popup hình ảnh chuẩn
+        setTimeout(() => {
+          showWinningModal(chosenDish);
+        }, 500);
+      }, 700);
+    }
+
+    // 6. VÒNG QUAY 30 MÓN TRÊN 1 BÁNH XE
+    let pool30Dishes = [];
+    const wheel30Colors = [
+      "#ff2a85", "#00f0ff", "#d4ff00", "#9d4edd", "#ff7b00", "#3a86ff",
+      "#06d6a0", "#ffbe0b", "#fb5607", "#8338ec", "#e63946", "#48cae4"
+    ];
+    let startAngle30 = 0;
+
+    function shuffle30Pool() {
+      const shuffled = [...filteredList].sort(() => 0.5 - Math.random());
+      pool30Dishes = shuffled.slice(0, Math.min(30, shuffled.length));
+      drawRoulette30();
+      const res = document.getElementById('spinResult');
+      if (res) res.innerText = `Đã nạp 30 món mới từ kho ${filteredList.length} món!`;
+    }
+
+    function drawRoulette30() {
+      if (pool30Dishes.length === 0) shuffle30Pool();
+      const canvas = document.getElementById("rouletteCanvas");
+      if (!canvas.getContext) return;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, 260, 260);
+
+      const count = pool30Dishes.length;
+      const arc = (2 * Math.PI) / count;
+
+      for (let i = 0; i < count; i++) {
+        const angle = startAngle30 + i * arc;
+        ctx.fillStyle = wheel30Colors[i % wheel30Colors.length];
+        ctx.beginPath();
+        ctx.arc(130, 130, 122, angle, angle + arc, false);
+        ctx.arc(130, 130, 0, angle + arc, angle, true);
+        ctx.stroke();
+        ctx.fill();
+
+        ctx.save();
+        ctx.fillStyle = (i % 3 === 1 || i % 3 === 2) ? "#000" : "#fff";
+        ctx.font = "bold 8.5px sans-serif";
+        ctx.translate(130 + Math.cos(angle + arc / 2) * 88, 130 + Math.sin(angle + arc / 2) * 88);
+        ctx.rotate(angle + arc / 2 + Math.PI / 2);
+        
+        const rawName = pool30Dishes[i].name;
+        const text = rawName.length > 9 ? rawName.substring(0, 8) + '..' : rawName;
+        ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+        ctx.restore();
+      }
+    }
+
+    let spinTime30 = 0;
+    let spinTimeTotal30 = 0;
+    let spinAngleStart30 = 0;
+    let lastTickAngle = 0;
+
+    function startSpinning30() {
+      const btn = document.getElementById('spinButton');
+      btn.disabled = true;
+      btn.innerText = "⏳ ĐANG QUAY GIỮA 30 MÓN...";
+      spinAngleStart30 = Math.random() * 15 + 30;
+      spinTime30 = 0;
+      spinTimeTotal30 = Math.random() * 1500 + 3200;
+      lastTickAngle = 0;
+      rotateAnimation30();
+    }
+
+    function rotateAnimation30() {
+      spinTime30 += 30;
+      if (spinTime30 >= spinTimeTotal30) {
+        stopAnimation30();
+        return;
+      }
+      const spinAngle = spinAngleStart30 - (spinTime30 / spinTimeTotal30) * spinAngleStart30;
+      startAngle30 += (spinAngle * Math.PI / 180);
+      
+      // Âm thanh kim chỉ nảy khi qua mỗi nan hoa
+      if (Math.abs(startAngle30 - lastTickAngle) > (Math.PI / 15)) {
+        playTickSound();
+        lastTickAngle = startAngle30;
+      }
+
+      drawRoulette30();
+      requestAnimationFrame(rotateAnimation30);
+    }
+
+    function stopAnimation30() {
+      const count = pool30Dishes.length;
+      const arc = (2 * Math.PI) / count;
+      const degrees = startAngle30 * 180 / Math.PI + 90;
+      const arcd = arc * 180 / Math.PI;
+      const index = Math.floor((360 - degrees % 360) / arcd);
+      const chosen = pool30Dishes[index % count];
+
+      document.getElementById('spinResult').innerHTML = `🎉 ĐÃ CHỐT: <span class="text-[#ffd700] underline">${chosen.name}</span> (${chosen.price})!`;
+      const btn = document.getElementById('spinButton');
+      btn.disabled = false;
+      btn.innerText = "🎰 QUAY LẠI 30 MÓN";
+
+      // Hiện Popup ảnh chuẩn sau khi vòng quay dừng
+      setTimeout(() => {
+        showWinningModal(chosen);
+      }, 400);
+    }
+
+    // 7. LỌC DANH MỤC
+    function filterCategory(cat, btn) {
+      currentFilter = cat;
+      document.querySelectorAll('.cat-pill').forEach(b => {
+        b.className = 'cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0';
+      });
+      if (btn) btn.className = 'cat-pill active px-3 py-1.5 rounded-xl font-bold bg-[#ffd700] text-black border-2 border-black hard-shadow flex-shrink-0';
+
+      filteredList = (cat === 'all') ? [...fullDatabase300] : fullDatabase300.filter(f => f.cat === cat);
+      load10CardsData();
+      shuffle30Pool();
+      renderSwipeCard(filteredList[0]);
+    }
+
+    function switchView(view) {
+      const cfSec = document.getElementById('cfSection');
+      const rouletteSec = document.getElementById('rouletteSection');
+      const swipeSec = document.getElementById('swipeSection');
+
+      const navCF = document.getElementById('nav-cf');
+      const navRoulette = document.getElementById('nav-roulette');
+      const navSwipe = document.getElementById('nav-swipe');
+
+      cfSec.classList.add('hidden');
+      rouletteSec.classList.add('hidden');
+      swipeSec.classList.add('hidden');
+
+      navCF.className = 'px-2.5 py-1 rounded-lg font-black bg-[#1b1f2b] text-gray-300';
+      navRoulette.className = 'px-2.5 py-1 rounded-lg font-black bg-[#1b1f2b] text-gray-300';
+      navSwipe.className = 'px-2.5 py-1 rounded-lg font-black bg-[#1b1f2b] text-gray-300';
+
+      if (view === 'cf-cards') {
+        cfSec.classList.remove('hidden');
+        navCF.className = 'px-2.5 py-1 rounded-lg font-black bg-[#ffd700] text-black hard-shadow';
+      } else if (view === 'roulette') {
+        rouletteSec.classList.remove('hidden');
+        navRoulette.className = 'px-2.5 py-1 rounded-lg font-black bg-[#ffd700] text-black hard-shadow';
+        drawRoulette30();
+      } else if (view === 'swipe') {
+        swipeSec.classList.remove('hidden');
+        navSwipe.className = 'px-2.5 py-1 rounded-lg font-black bg-[#ffd700] text-black hard-shadow';
+        renderSwipeCard(filteredList[0]);
+      }
+    }
+
+    function renderSwipeCard(item) {
+      if (!item) return;
+      document.getElementById('cardTitle').innerText = item.name;
+      document.getElementById('cardCategory').innerText = item.catName;
+      document.getElementById('cardPrice').innerText = item.price;
+      document.getElementById('cardOrigin').innerText = item.origin;
+      document.getElementById('cardImage').style.backgroundImage = `url('${item.img}')`;
+    }
+
+    function triggerSwipe(dir) {
+      const card = document.getElementById('foodCard');
+      card.classList.add(dir === 'right' ? 'card-swipe-right' : 'card-swipe-left');
+      setTimeout(() => {
+        card.classList.remove('card-swipe-right', 'card-swipe-left');
+        const rand = filteredList[Math.floor(Math.random() * filteredList.length)];
+        renderSwipeCard(rand);
+      }, 300);
+    }
+
+    // Khởi tạo
+    build10CardsGrid();
+    shuffle30Pool();
+  </script>
+</body>
+</html>

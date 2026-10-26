@@ -1,0 +1,19 @@
+{
+  "name": "food-roulette-web",
+  "version": "1.0.0",
+  "description": "Ăn Gì Hôm Nay? - Web App Quyết Định Món Ăn Kiểu Đột Kích (CF) & Vòng Quay 30 Món (Kho 300 Món)",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [
+    "food-roulette",
+    "an-gi-hom-nay",
+    "cf-card-flip",
+    "vietnamese-food",
+    "gen-z-ui"
+  ],
+  "author": "Le Thien Phu",
+  "license": "MIT"
+}
