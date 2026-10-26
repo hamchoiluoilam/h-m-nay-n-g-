@@ -108,27 +108,53 @@
       </div>
     </div>
 
-    <!-- Category Pills Slider -->
-    <div class="mb-2">
-      <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-1 text-xs">
-        <button onclick="filterCategory('all', this)" class="cat-pill active px-3 py-1.5 rounded-xl font-bold bg-[#ffd700] text-black border-2 border-black hard-shadow flex-shrink-0">
+    <!-- Category & Price Filter Controls -->
+    <div class="mb-2 space-y-1.5">
+      <!-- 1. Category Pills Slider -->
+      <div class="flex space-x-1.5 overflow-x-auto no-scrollbar py-0.5 text-xs" id="categoryPills">
+        <button onclick="filterCategory('all', this)" class="cat-pill active px-3 py-1.5 rounded-xl font-bold bg-[#ffd700] text-black border-2 border-black hard-shadow flex-shrink-0 transition-all">
           🔥 Tất Cả (300)
         </button>
-        <button onclick="filterCategory('nuoc', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
-          🍜 Đồ Nước (60)
+        <button onclick="filterCategory('nuoc', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          🍜 Đồ Nước (64)
         </button>
-        <button onclick="filterCategory('kho', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
+        <button onclick="filterCategory('kho', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0 transition-all">
           🍚 Cơm & Khô (60)
         </button>
-        <button onclick="filterCategory('ngoai', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
-          🌏 Món Ngoại (70)
+        <button onclick="filterCategory('ngoai', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          🌏 Món Ngoại (58)
         </button>
-        <button onclick="filterCategory('vat', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
-          🧋 Ăn Vặt (70)
+        <button onclick="filterCategory('vat', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          🧋 Ăn Vặt (74)
         </button>
-        <button onclick="filterCategory('healthy', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0">
-          🥗 Healthy (40)
+        <button onclick="filterCategory('healthy', this)" class="cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          🥗 Healthy (44)
         </button>
+      </div>
+
+      <!-- 2. Price Tier Pills Slider (Mức Giá: 20k-100k, 100k-200k, 200k-500k, 500k-2tr) -->
+      <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-0.5 text-[11px]" id="priceTierPills">
+        <button onclick="filterPrice('all', this)" class="price-pill active px-2.5 py-1 rounded-lg font-black bg-[#00f0ff] text-black border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          💸 Mọi giá
+        </button>
+        <button onclick="filterPrice('tier1', this)" class="price-pill px-2.5 py-1 rounded-lg font-bold bg-[#1b1f2d] text-[#10b981] border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          🟢 20k - 100k <span class="text-[9px] text-gray-400 font-normal">(Bình dân)</span>
+        </button>
+        <button onclick="filterPrice('tier2', this)" class="price-pill px-2.5 py-1 rounded-lg font-bold bg-[#1b1f2d] text-[#38bdf8] border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          🔵 100k - 200k <span class="text-[9px] text-gray-400 font-normal">(No nê)</span>
+        </button>
+        <button onclick="filterPrice('tier3', this)" class="price-pill px-2.5 py-1 rounded-lg font-bold bg-[#1b1f2d] text-[#c084fc] border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          🟣 200k - 500k <span class="text-[9px] text-gray-400 font-normal">(Lẩu nướng)</span>
+        </button>
+        <button onclick="filterPrice('tier4', this)" class="price-pill px-2.5 py-1 rounded-lg font-bold bg-[#1b1f2d] text-[#fbbf24] border-2 border-black hard-shadow flex-shrink-0 transition-all">
+          👑 500k - 2TR <span class="text-[9px] text-gray-400 font-normal">(VIP Sang chảnh)</span>
+        </button>
+      </div>
+
+      <!-- Real-time Filter Stats Badge -->
+      <div class="flex items-center justify-between px-1 text-[10px] text-gray-400 font-mono">
+        <span id="activeFilterBadge" class="text-white font-bold">🎯 Kho món: <span class="text-[#ffd700]">300 món</span></span>
+        <span class="text-gray-400">Tự động nạp vào Thẻ & Vòng quay</span>
       </div>
     </div>
 
@@ -290,81 +316,17 @@
   <!-- COMPLETE 300 DISHES DATABASE & 100% ACCURATE FOOD IMAGE ENGINE -->
   <script>
     // 1. TẠO DATABASE 300 MÓN CHUẨN VỊ
-    const rawDishNames = {
-      nuoc: [
-        "Phở Bò Tái Lăn", "Phở Gà Đồi Lá Chanh", "Bún Bò Huế Chả Cua", "Hủ Tiếu Nam Vang", "Bún Riêu Cua Ốc Mít",
-        "Bánh Canh Ghẹ", "Bánh Canh Cua Giò Heo", "Bánh Canh Cá Lóc", "Bún Mắm Miền Tây", "Bún Chả Cá Nha Trang",
-        "Bún Mọc Sườn Non", "Mì Quảng Tôm Thịt", "Mì Vịt Tiềm Thuốc Bắc", "Mì Hoành Thánh Xá Xíu", "Miến Lươn Giòn Cay",
-        "Miến Gà Măng Khô", "Mì Ramen Tonkotsu", "Mì Udon Bò Bắp", "Mì Cay Hàn Quốc 7 Cấp", "Lẩu Thái Chua Cay",
-        "Lẩu Gà Lá É Đà Lạt", "Lẩu Riêu Cua Bắp Bò", "Lẩu Nấm Thiên Nhiên", "Cháo Sườn Sụn Ngõ Huyện", "Cháo Ếch Singapore",
-        "Cháo Lòng Đầy Đủ Dồi", "Súp Cua Trứng Bách Thảo", "Bún Dọc Mùng Chân Giò", "Bánh Đa Cua Hải Phòng", "Hủ Tiếu Mực Tươi",
-        "Bún Cá Cay Hải Phòng", "Bún Ốc Chuối Đậu", "Bún Sứa Quy Nhơn", "Bún Bò Tái Gầu", "Phở Bò Sốt Vang",
-        "Phở Trộn Chua Ngọt", "Hủ Tiếu Bò Kho", "Mì Bò Kho Bánh Mì", "Bún Măng Vịt Mắm Gừng", "Bún Gỏi Già Sóc Trăng",
-        "Bánh Canh Bột Xắt", "Bánh Canh Trảng Bàng", "Bún Kèn Kiên Giang", "Bún Cá Rô Đồng", "Bún Bung Hoa Chuối",
-        "Bún Thang Hà Nội", "Miến Cua Bể Nồi Đất", "Cháo Cá Lóc Rau Đắng", "Cháo Hàu Sữa Nóng", "Cháo Bò Bằm Trứng Gà",
-        "Lẩu Bò Nhúng Dấm", "Lẩu Mắm Cá Linh", "Lẩu Hải Sản Tomyum", "Lẩu Ếch Măng Cay", "Lẩu Dê Khô Tàu Bột",
-        "Lẩu Cừu Mông Cổ", "Mì Sủi Cảo Tôm Thịt", "Mì Soba Lạnh Nhật", "Mì Laksa Singapore", "Súp Bào Ngư Vi Cá"
-      ],
-      kho: [
-        "Cơm Tấm Sườn Bì Chả", "Cơm Gà Xối Mỡ Da Giòn", "Cơm Gà Xé Hội An", "Cơm Rang Dưa Bò Phố Cổ", "Cơm Niêu Cá Kho Tộ",
-        "Cơm Thố Xá Xíu Lạp Xưởng", "Cơm Cháy Kho Quẹt Tôm Khô", "Bánh Mì Thịt Nướng Than", "Bánh Mì Chảo Xíu Mại Pate", "Bánh Mì Kebab Thổ Nhĩ Kỳ",
-        "Bún Đậu Mắm Tôm Thập Cẩm", "Bún Chả Nướng Que Tre", "Bún Thịt Nướng Chả Giò", "Bún Thịt Xào Sả Ớt", "Xôi Xéo Gà Xé Hành Phi",
-        "Xôi Mặn Thập Cẩm Chả Lụa", "Bánh Cuốn Nóng Chả Mực", "Bánh Ướt Lòng Gà Đà Lạt", "Bánh Xèo Tôm Nhảy", "Bánh Khọt Tôm Mực Vũng Tàu",
-        "Bún Trộn Bò Nam Bộ", "Hủ Tiếu Khô Sa Đéc", "Mì Trộn Xá Xíu Trứng Cút", "Cơm Chiên Kim Chi Bò", "Cơm Chiên Cá Mặn Gà Xé",
-        "Cơm Chiên Dương Châu", "Cơm Rang Dưa Chua Lòng Bò", "Xôi Khúc Hà Nội Nhân Đậu", "Cơm Lam Gà Nướng Tây Nguyên", "Cơm Heo Quay Bì Giòn",
-        "Cơm Vịt Quay Sốt Tiêu", "Bánh Mì Heo Quay Giòn Rụm", "Bánh Mì Chả Cá Nha Trang", "Bánh Mì Bò Kho", "Bánh Mì Xíu Mại Trứng Muối",
-        "Bún Bắp Bò Xào Cần Tỏi", "Bún Nem Rán Hà Nội", "Bún Thịt Nướng Tôm Lụi", "Xôi Bắp Mỡ Hành Đậu Xanh", "Xôi Vò Hạt Sen Bùi Béo",
-        "Bánh Bèo Chén Tôm Chấy", "Bánh Nậm Lá Chuối Nóng", "Bánh Lọc Tôm Thịt Huế", "Bánh Hỏi Thịt Nướng Kim Tiền", "Bánh Căn Trứng Cút Đà Lạt",
-        "Cơm Thố Bò Áp Chảo", "Cơm Đùi Gà Nướng Mật Ong", "Cơm Thịt Kho Tàu Nước Dừa", "Cơm Cá Ba Sa Kho Tộ", "Cơm Sườn Non Rim Mặn",
-        "Cơm Mực Nhồi Thịt Sốt Cà", "Cơm Bò Xào Bông Cải", "Cơm Chiên Tỏi Trứng Muối", "Cơm Chiên Lá Cẩm Hải Sản", "Mì Trộn Muối Ớt Tôm Bò",
-        "Mì Xào Giòn Hải Sản", "Hủ Tiếu Xào Bò Áp Chảo", "Phở Xào Bắp Bò Cần Tỏi", "Miến Xào Cua Bể", "Miến Xào Lòng Gà Trứng Non"
-      ],
-      ngoai: [
-        "Gà Rán Phô Mai K-Food", "Cơm Trộn Bibimbap Thố Đá", "Lẩu Tokbokki Phô Mai", "Canh Kim Chi Thịt Heo", "Kimbap Chiên Xù Giòn",
-        "Mì Tương Đen Jajangmyeon", "Sushi & Sashimi Cá Hồi", "Cơm Cà Ri Bò Nhật Bản", "Cơm Lươn Nướng Teriyaki", "Bánh Bạch Tuộc Takoyaki",
-        "Cơm Thịt Chiên Tonkatsu", "Pad Thai Tôm Tươi", "Canh Tom Yum Kung Tôm Càng", "Cơm Chiên Trái Thơm", "Gỏi Đu Đủ Som Tum",
-        "Xôi Xoài Nước Cốt Dừa", "Pizza Hải Sản Sốt Pesto", "Pizza Bò Pepperoni", "Mì Ý Sốt Bò Bolognese", "Mì Ý Sốt Kem Carbonara",
-        "Burger Bò Phô Mai Tan Chảy", "Steak Thăn Bò Mỹ Sốt Tiêu", "Sườn Nướng Khổng Lồ BBQ", "Dimsum Há Cảo Tôm", "Xíu Mại Tôm Thịt Trứng Cút",
-        "Vịt Quay Bắc Kinh Cuốn Bánh", "Mì Bò Hầm Đài Loan", "Bánh Bao Kim Sa Trứng Muối", "Cà Ri Gà Bơ Bánh Naan", "Cơm Biriayani Cừu Ấn Độ",
-        "Taco Bò Cay Mexico", "Bánh Mì Kebab Thổ Nhĩ Kỳ", "Cơm Đùi Gà Teriyaki", "Mì Cay Bạch Tuộc Phô Mai", "Cá Hồi Nướng Bơ Chanh",
-        "Mì Soba Xào Yakisoba", "Cơm Donburi Trứng Gà Oyakodon", "Lẩu Shabu Shabu Nhật Bản", "Lẩu Sukiyaki Bò Wagyu", "Thịt Nướng Samgyeopsal Hàn",
-        "Mì Lạnh Naengmyeon Hàn", "Cơm Gà Hải Nam Singapore", "Hủ Tiếu Xào Char Kway Teow", "Cà Ri Xanh Gà Nước Cốt Dừa", "Cơm Nếp Cốt Dừa Nasi Lemak",
-        "Mì Ramen Cay Miso Hầm", "Salad Caesar Thịt Xông Khói", "Bò Hầm Rượu Vang Pháp", "Bánh Mì Kẹp Xúc Xích Hotdog", "Sườn Cừu Nướng Lá Thơm",
-        "Pizza 4 Loại Phô Mai Mật Ong", "Mì Ý Mực Đen Hải Sản", "Cơm Chiên Kimchi Phô Mai", "Bánh Kếp Crepe Chuối Nutella", "Bánh Tacos Gà Giòn Sốt Mayo",
-        "Burrito Thịt Bò Cuộn Phô Mai", "Quesadilla Phô Mai Nướng Giòn", "Gà Hấp Muối Quảng Đông", "Đậu Phụ Tứ Xuyên Ma Po", "Heo Quay Giòn Bì Macao",
-        "Mì Kéo Lan Châu Thịt Bò", "Cơm Niêu Cơm Cháy Singapore", "Mì Hoành Thánh Tôm Giòn Hong Kong", "Bánh Xếp Gyoza Áp Chảo", "Bò Lúc Lắc Kiểu Pháp",
-        "Mì Ý Tôm Sốt Kem Bơ Tỏi", "Lasagna Bò Bút Phô Mai", "Cơm Risotto Nấm Ý", "Bánh Tiramisu Ý Cacao", "Gà Tikka Masala Đậm Vị"
-      ],
-      vat: [
-        "Trà Sữa Trân Châu Đường Đen", "Trà Đào Cam Sả Hạt Chia", "Trà Mãng Cầu Tươi Dầm Đá", "Bánh Tráng Nướng Trứng Đà Lạt", "Bánh Tráng Trộn Bò Khô",
-        "Bánh Tráng Cuốn Bơ Sốt Me", "Ốc Hương Xào Trứng Muối", "Ốc Móng Tay Xào Muống Tỏi", "Càng Ghẹ Rang Muối Ớt", "Nem Chua Rán Hà Nội",
-        "Cá Viên Chiên Mắm Tỏi Ớt", "Bắp Xào Tép Bơ Mỡ Hành", "Chè Khúc Bạch Hạnh Nhân", "Chè Bưởi An Giang", "Tàu Hũ Trân Châu Gừng Nóng",
-        "Gỏi Cuốn Tôm Thịt Tươi", "Chân Gà Sả Tắc Cay Nồng", "Khoai Lang Kén Chiên Mè", "Kem Bơ Sầu Riêng Đà Lạt", "Bánh Chuối Chiên Phồng Giòn",
-        "Xiên Bẩn Cổng Trường Đầy Đủ", "Bánh Giò Nóng Thịt Nấm", "Hột Vịt Lộn Xào Me", "Trà Sữa Oolong Nướng", "Sinh Tố Bơ Đậm Đặc",
-        "Bánh Rán Mật Đường Phố Cổ", "Bánh Tiêu Sữa Đậu Nành", "Bánh Quẩy Nóng Giòn Tan", "Bánh Khoai Mỡ Chiên Giòn", "Khoai Tây Lắc Phô Mai Bột",
-        "Gà Popcorn Lắc Phô Mai", "Bánh Đồng Xu Phô Mai Kéo Sợi", "Bánh Trứng Gà Non Hong Kong", "Kem Gelato Ý Đủ Vị", "Sữa Chua Dẻo Trái Cây",
-        "Sữa Chua Trân Châu Hạ Long", "Chè Thái Sầu Riêng Ngập Topping", "Chè Dừa Dầm Hải Phòng", "Chè Sương Sa Hạt Lựu", "Trà Chanh Giã Tay Quảng Đông",
-        "Trà Tắc Xí Muội Mát Lạnh", "Trà Dâu Tằm Dầm Đá", "Bánh Bột Lọc Chiên Giòn", "Trứng Cút Lộn Xào Me", "Súp Bong Bóng Cá Nóng",
-        "Bò Bía Ngọt Giòn Cơm Dừa", "Bánh Kẹp Lá Dứa Nóng Hổi", "Xôi Chiên Phồng Chà Bông", "Cá Tai Tượng Chiên Xù", "Hàu Nướng Mỡ Hành Đậu Phộng",
-        "Sò Điệp Nướng Trứng Cút", "Bạch Tuộc Nướng Sa Tế", "Mực Nướng Muối Ớt Xé Sợi", "Nem Nướng Nha Trang Cuốn Bánh", "Chả Ram Tôm Đất Giòn Rụm",
-        "Bánh Tráng Chấm Mỡ Hành Trứng Cút", "Bánh Tráng Xì Ke Muối Tỏi", "Xoài Lắc Muối Tôm", "Cóc Bao Tử Dầm Chua Ngọt", "Mận Lắc Muối Tây Ninh",
-        "Ổi Bo Dầm Xí Muội", "Bánh Mì Nướng Muối Ớt", "Bánh Donut Phủ Socola", "Bánh Su Kem Vani Mát Lạnh", "Chè Bánh Trôi Nước Đường Mật",
-        "Chè Đậu Đỏ Nước Cốt Dừa", "Trà Sữa Khoai Môn Dẻo", "Cà Phê Muối Xứ Huế", "Cà Phê Trứng Béo Ngậy", "Trà Hoa Cúc Mật Ong Nóng"
-      ],
-      healthy: [
-        "Salad Ức Gà Sốt Mè Rang", "Poke Bowl Cá Hồi Quả Bơ", "Cơm Gạo Lứt Bò Áp Chảo", "Bún Gạo Lứt Trộn Ức Gà", "Bánh Mì Đen Quả Bơ Trứng Chần",
-        "Gỏi Cuốn Chay Nấm Đậu Hũ", "Salad Tôm Nướng Giấm Balsamic", "Cháo Yến Mạch Ức Gà Xé", "Bún Nấm Chay Thanh Đạm", "Smoothie Bowl Chuối Việt Quất",
-        "Cơm Gạo Lứt Cá Hồi Áp Chảo", "Súp Bí Đỏ Hạt Sen Nấu Nấm", "Bún Chả Nấm Chay Nướng", "Canh Rong Biển Đậu Hũ Thịt Bằm", "Salad Cá Ngừ Ngô Ngọt",
-        "Cơm Gạo Lứt Gà Nướng Teriyaki", "Miến Dong Trộn Rau Củ Chay", "Bánh Mì Đen Bơ Đậu Phộng Chuối", "Súp Lơ Xanh Luộc Chấm Trứng Dầm", "Canh Cải Cúc Thịt Nạc",
-        "Canh Mướp Nấu Tôm Tươi", "Cháo Đậu Xanh Thịt Bằm", "Cháo Yến Mạch Hạt Chia Sữa Tươi", "Salad Bơ Trứng Gà Sốt Chanh Dây", "Gỏi Ngó Sen Tôm Thịt Ít Béo",
-        "Cơm Gạo Lứt Ức Gà Xào Nấm", "Cơm Chay Thập Cẩm Rau Nấm", "Bún Đậu Hũ Kho Nấm Rơm", "Hủ Tiếu Chay Nước Lèo Củ Quả", "Bánh Canh Nấm Chay Nước Trong",
-        "Canh Chua Chay Bạc Hà Đậu Bắp", "Chả Lụa Chay Cuốn Rau Mầm", "Đậu Hũ Hấp Rau Củ Nước Tương", "Bông Cải Xào Ức Gà Dầu Oliu", "Salad Ức Gà Sốt Sữa Chua Hy Lạp",
-        "Poke Bowl Tôm Luộc Quả Bơ", "Cơm Lứt Trộn Rau Củ Cầu Vồng", "Canh Bí Đao Nấu Tôm Giảm Cân", "Bún Tươi Nước Dùng Rau Củ Quả", "Súp Nấm Tuyết Hạt Sen Chay"
-      ]
-    };
+    // 1. KHO DỮ LIỆU ĐA DẠNG 300 MÓN ĂN KÈM MỨC GIÁ & DANH MỤC
+    const rawDishCatalog = [["Phở Bò Tái Lăn", "nuoc", "tier1", "45.000đ - 65.000đ", "Hà Nội Phố Cổ"], ["Phở Gà Đồi Lá Chanh", "nuoc", "tier1", "40.000đ - 60.000đ", "Đặc sản Hà Nội"], ["Bún Bò Huế Chả Cua", "nuoc", "tier1", "45.000đ - 65.000đ", "Cố đô Huế"], ["Hủ Tiếu Nam Vang", "nuoc", "tier1", "45.000đ - 70.000đ", "Sài Gòn"], ["Bún Riêu Cua Ốc Mít", "nuoc", "tier1", "35.000đ - 55.000đ", "Hà Nội Phố"], ["Bánh Canh Ghẹ", "nuoc", "tier1", "55.000đ - 85.000đ", "Vũng Tàu"], ["Bánh Canh Cua Giò Heo", "nuoc", "tier1", "50.000đ - 75.000đ", "Sài Gòn Chợ Lớn"], ["Bánh Canh Cá Lóc", "nuoc", "tier1", "35.000đ - 50.000đ", "Quảng Trị"], ["Bún Mắm Miền Tây", "nuoc", "tier1", "55.000đ - 80.000đ", "Miền Tây Sông Nước"], ["Bún Chả Cá Nha Trang", "nuoc", "tier1", "40.000đ - 60.000đ", "Nha Trang Khánh Hòa"], ["Bún Mọc Sườn Non", "nuoc", "tier1", "45.000đ - 65.000đ", "Bắc Bộ"], ["Mì Quảng Tôm Thịt", "nuoc", "tier1", "40.000đ - 60.000đ", "Quảng Nam"], ["Miến Lươn Giòn Cay", "nuoc", "tier1", "50.000đ - 75.000đ", "Nghệ An"], ["Miến Gà Măng Khô", "nuoc", "tier1", "45.000đ - 65.000đ", "Hà Nội"], ["Cháo Sườn Sụn Ngõ Huyện", "nuoc", "tier1", "30.000đ - 45.000đ", "Hà Nội"], ["Cháo Lòng Đầy Đủ Dồi", "nuoc", "tier1", "35.000đ - 50.000đ", "Dân dã"], ["Súp Cua Trứng Bách Thảo", "nuoc", "tier1", "35.000đ - 55.000đ", "Sài Gòn"], ["Bún Dọc Mùng Chân Giò", "nuoc", "tier1", "45.000đ - 65.000đ", "Hà Nội"], ["Bánh Đa Cua Hải Phòng", "nuoc", "tier1", "45.000đ - 65.000đ", "Đất Cảng"], ["Hủ Tiếu Mực Tươi", "nuoc", "tier1", "55.000đ - 85.000đ", "Miền Tây"], ["Bún Cá Cay Hải Phòng", "nuoc", "tier1", "40.000đ - 60.000đ", "Hải Phòng"], ["Bún Ốc Chuối Đậu", "nuoc", "tier1", "40.000đ - 60.000đ", "Hà Nội Phố Cổ"], ["Bún Sứa Quy Nhơn", "nuoc", "tier1", "45.000đ - 65.000đ", "Quy Nhơn Bình Định"], ["Bún Bò Tái Gầu", "nuoc", "tier1", "45.000đ - 65.000đ", "Huế"], ["Phở Bò Sốt Vang", "nuoc", "tier1", "50.000đ - 75.000đ", "Hà Nội"], ["Phở Trộn Chua Ngọt", "nuoc", "tier1", "45.000đ - 65.000đ", "Hà Nội"], ["Hủ Tiếu Bò Kho", "nuoc", "tier1", "45.000đ - 65.000đ", "Nam Bộ"], ["Bún Măng Vịt Mắm Gừng", "nuoc", "tier1", "50.000đ - 70.000đ", "Miền Tây"], ["Bún Gỏi Già Sóc Trăng", "nuoc", "tier1", "45.000đ - 65.000đ", "Sóc Trăng"], ["Bánh Canh Bột Xắt", "nuoc", "tier1", "35.000đ - 55.000đ", "Bến Tre"], ["Bánh Canh Trảng Bàng", "nuoc", "tier1", "45.000đ - 65.000đ", "Tây Ninh"], ["Bún Kèn Kiên Giang", "nuoc", "tier1", "40.000đ - 60.000đ", "Kiên Giang"], ["Bún Cá Rô Đồng", "nuoc", "tier1", "40.000đ - 60.000đ", "Hải Dương"], ["Bún Bung Hoa Chuối", "nuoc", "tier1", "40.000đ - 60.000đ", "Thái Bình"], ["Bún Thang Hà Nội", "nuoc", "tier1", "50.000đ - 75.000đ", "Hà Nội Tinh Túy"], ["Cháo Cá Lóc Rau Đắng", "nuoc", "tier1", "40.000đ - 60.000đ", "Miền Tây"], ["Cháo Bò Bằm Trứng Gà", "nuoc", "tier1", "35.000đ - 50.000đ", "Dinh dưỡng"], ["Mì Cay Hàn Quốc 7 Cấp", "nuoc", "tier1", "50.000đ - 85.000đ", "K-Food Hot"], ["Mì Vịt Tiềm Thuốc Bắc", "nuoc", "tier2", "110.000đ - 160.000đ", "Sài Gòn Chợ Lớn"], ["Mì Hoành Thánh Xá Xíu Khổng Lồ", "nuoc", "tier2", "100.000đ - 145.000đ", "Hong Kong Style"], ["Miến Cua Bể Nồi Đất", "nuoc", "tier2", "130.000đ - 190.000đ", "Hải Phòng Cát Bà"], ["Cháo Ếch Singapore Thố Đôi", "nuoc", "tier2", "120.000đ - 180.000đ", "Singapore Style"], ["Cháo Hàu Sữa Nóng Thố Lớn", "nuoc", "tier2", "110.000đ - 165.000đ", "Quảng Ninh"], ["Mì Ramen Tonkotsu Nhật Bản", "nuoc", "tier2", "125.000đ - 175.000đ", "Tokyo Nhật Bản"], ["Mì Udon Bò Bắp Trứng Lòng Đào", "nuoc", "tier2", "120.000đ - 165.000đ", "Nhật Bản"], ["Mì Soba Lạnh Tempura", "nuoc", "tier2", "115.000đ - 160.000đ", "Nhật Bản"], ["Mì Laksa Singapore Tôm Càng", "nuoc", "tier2", "130.000đ - 185.000đ", "Singapore"], ["Mì Sủi Cảo Tôm Thịt Thượng Canh", "nuoc", "tier2", "110.000đ - 150.000đ", "Quảng Đông"], ["Lẩu Thái Chua Cay Khổng Lồ", "nuoc", "tier3", "250.000đ - 450.000đ", "Thái Lan Feast"], ["Lẩu Gà Lá É Đà Lạt Nồi Lớn", "nuoc", "tier3", "250.000đ - 420.000đ", "Đà Lạt Mộng Mơ"], ["Lẩu Riêu Cua Bắp Bò Sườn Sụn", "nuoc", "tier3", "280.000đ - 480.000đ", "Hà Nội Phố"], ["Lẩu Nấm Thiên Nhiên Dưỡng Sinh", "nuoc", "tier3", "280.000đ - 450.000đ", "Healthy Feast"], ["Lẩu Bò Nhúng Dấm Thăn Hoa", "nuoc", "tier3", "290.000đ - 480.000đ", "Hà Nội"], ["Lẩu Mắm Cá Linh Miền Tây Nồi To", "nuoc", "tier3", "280.000đ - 460.000đ", "Đặc sản An Giang"], ["Lẩu Hải Sản Tomyum Tôm Càng", "nuoc", "tier3", "320.000đ - 490.000đ", "Bangkok"], ["Lẩu Ếch Măng Cay Nồi Lớn", "nuoc", "tier3", "260.000đ - 420.000đ", "Hà Nội"], ["Lẩu Dê Khô Tàu Bột Thuốc Bắc", "nuoc", "tier3", "320.000đ - 490.000đ", "Ninh Bình"], ["Lẩu Cá Lăng Măng Chua Tây Bắc", "nuoc", "tier3", "300.000đ - 480.000đ", "Sông Đà"], ["👑 Lẩu Hải Sản Hoàng Đế King Crab Cay Nồng", "nuoc", "tier4", "1.200.000đ - 1.950.000đ", "Hoàng Gia VIP"], ["👑 Lẩu Nấm Quý Tùng Nhung & Đông Trùng Hoàng Gia", "nuoc", "tier4", "750.000đ - 1.500.000đ", "Đẳng Cấp Thượng Lưu"], ["👑 Bào Ngư Vi Cá Hầm Thượng Canh Cung Đình", "nuoc", "tier4", "650.000đ - 1.450.000đ", "Đại Tiệc Cung Đình"], ["👑 Lẩu Cua Pha Lê Cà Mau 2 Cua Gạch Khủng", "nuoc", "tier4", "650.000đ - 1.250.000đ", "Cà Mau Đệ Nhất"], ["👑 Lẩu Tôm Hùm Baby Nước Dừa Xiêm Chua Cay", "nuoc", "tier4", "700.000đ - 1.350.000đ", "Nha Trang VIP"], ["👑 Lẩu Cừu Mông Cổ Hoàng Gia Thảo Mộc Đại Tiệc", "nuoc", "tier4", "600.000đ - 1.100.000đ", "Mông Cổ VIP"], ["Cơm Tấm Sườn Bì Chả", "kho", "tier1", "45.000đ - 70.000đ", "Sài Gòn"], ["Cơm Gà Xối Mỡ Da Giòn", "kho", "tier1", "45.000đ - 65.000đ", "Sài Gòn"], ["Cơm Gà Xé Hội An", "kho", "tier1", "45.000đ - 70.000đ", "Hội An"], ["Cơm Rang Dưa Bò Phố Cổ", "kho", "tier1", "45.000đ - 70.000đ", "Hà Nội"], ["Bánh Mì Thịt Nướng Than", "kho", "tier1", "25.000đ - 40.000đ", "Đường phố VN"], ["Bánh Mì Chảo Xíu Mại Pate", "kho", "tier1", "40.000đ - 65.000đ", "Hà Nội / Đà Lạt"], ["Bánh Mì Kebab Thổ Nhĩ Kỳ", "kho", "tier1", "30.000đ - 45.000đ", "Fast Food"], ["Bún Đậu Mắm Tôm Thập Cẩm Suất Vừa", "kho", "tier1", "45.000đ - 75.000đ", "Hà Nội"], ["Bún Chả Nướng Que Tre", "kho", "tier1", "45.000đ - 70.000đ", "Hà Nội"], ["Bún Thịt Nướng Chả Giò", "kho", "tier1", "40.000đ - 65.000đ", "Miền Nam"], ["Bún Thịt Xào Sả Ớt", "kho", "tier1", "40.000đ - 60.000đ", "Miền Tây"], ["Xôi Xéo Gà Xé Hành Phi", "kho", "tier1", "30.000đ - 50.000đ", "Hà Nội"], ["Xôi Mặn Thập Cẩm Chả Lụa", "kho", "tier1", "25.000đ - 45.000đ", "Sài Gòn"], ["Bánh Cuốn Nóng Chả Mực", "kho", "tier1", "45.000đ - 70.000đ", "Quảng Ninh"], ["Bánh Ướt Lòng Gà Đà Lạt", "kho", "tier1", "40.000đ - 60.000đ", "Đà Lạt"], ["Bánh Xèo Tôm Nhảy", "kho", "tier1", "45.000đ - 70.000đ", "Bình Định"], ["Bánh Khọt Tôm Mực Vũng Tàu", "kho", "tier1", "45.000đ - 70.000đ", "Vũng Tàu"], ["Bún Trộn Bò Nam Bộ", "kho", "tier1", "45.000đ - 65.000đ", "Hà Nội"], ["Hủ Tiếu Khô Sa Đéc", "kho", "tier1", "45.000đ - 70.000đ", "Đồng Tháp"], ["Mì Trộn Xá Xíu Trứng Cút", "kho", "tier1", "40.000đ - 65.000đ", "Sài Gòn"], ["Cơm Chiên Kim Chi Bò", "kho", "tier1", "45.000đ - 70.000đ", "K-Food"], ["Cơm Chiên Cá Mặn Gà Xé", "kho", "tier1", "50.000đ - 75.000đ", "Quảng Đông"], ["Cơm Chiên Dương Châu", "kho", "tier1", "45.000đ - 70.000đ", "Kinh điển"], ["Cơm Rang Dưa Chua Lòng Bò", "kho", "tier1", "50.000đ - 75.000đ", "Hà Nội"], ["Xôi Khúc Hà Nội Nhân Đậu", "kho", "tier1", "20.000đ - 35.000đ", "Hà Nội"], ["Bánh Mì Heo Quay Giòn Rụm", "kho", "tier1", "30.000đ - 45.000đ", "Sài Gòn"], ["Bánh Mì Chả Cá Nha Trang", "kho", "tier1", "25.000đ - 35.000đ", "Nha Trang"], ["Bánh Mì Xíu Mại Trứng Muối", "kho", "tier1", "35.000đ - 50.000đ", "Đà Lạt"], ["Bún Bắp Bò Xào Cần Tỏi", "kho", "tier1", "50.000đ - 75.000đ", "Hà Nội"], ["Bún Nem Rán Hà Nội", "kho", "tier1", "40.000đ - 65.000đ", "Hà Nội"], ["Xôi Bắp Mỡ Hành Đậu Xanh", "kho", "tier1", "20.000đ - 30.000đ", "Dân dã"], ["Xôi Vò Hạt Sen Bùi Béo", "kho", "tier1", "25.000đ - 40.000đ", "Hà Nội"], ["Bánh Bèo Chén Tôm Chấy", "kho", "tier1", "35.000đ - 55.000đ", "Huế"], ["Bánh Nậm Lá Chuối Nóng", "kho", "tier1", "30.000đ - 45.000đ", "Huế"], ["Bánh Lọc Tôm Thịt Huế", "kho", "tier1", "35.000đ - 55.000đ", "Huế"], ["Bánh Hỏi Thịt Nướng Kim Tiền", "kho", "tier1", "45.000đ - 70.000đ", "Bình Định"], ["Bánh Căn Trứng Cút Đà Lạt", "kho", "tier1", "35.000đ - 55.000đ", "Đà Lạt"], ["Cơm Sườn Non Rim Mặn", "kho", "tier1", "45.000đ - 70.000đ", "Gia đình"], ["Cơm Mực Nhồi Thịt Sốt Cà", "kho", "tier1", "50.000đ - 75.000đ", "Gia đình"], ["Cơm Bò Xào Bông Cải", "kho", "tier1", "45.000đ - 70.000đ", "Gia đình"], ["Mì Trộn Muối Ớt Tôm Bò", "kho", "tier1", "45.000đ - 70.000đ", "Sài Gòn"], ["Mì Xào Giòn Hải Sản", "kho", "tier1", "50.000đ - 80.000đ", "Chợ Lớn"], ["Hủ Tiếu Xào Bò Áp Chảo", "kho", "tier1", "50.000đ - 75.000đ", "Nam Bộ"], ["Phở Xào Bắp Bò Cần Tỏi", "kho", "tier1", "50.000đ - 75.000đ", "Hà Nội"], ["Miến Xào Lòng Gà Trứng Non", "kho", "tier1", "45.000đ - 70.000đ", "Bắc Bộ"], ["Cơm Niêu Cá Kho Tộ Niêu Lớn", "kho", "tier2", "110.000đ - 160.000đ", "Nam Bộ"], ["Cơm Thố Xá Xíu Lạp Xưởng Hoàng Kim", "kho", "tier2", "115.000đ - 170.000đ", "Hong Kong"], ["Cơm Cháy Kho Quẹt Tôm Khô Thịt Ba Chỉ", "kho", "tier2", "100.000đ - 150.000đ", "Miền Tây"], ["Cơm Lam Gà Nướng Tây Nguyên Đĩa Lớn", "kho", "tier2", "140.000đ - 195.000đ", "Tây Nguyên"], ["Cơm Heo Quay Bì Giòn Macao", "kho", "tier2", "110.000đ - 160.000đ", "Macao"], ["Cơm Vịt Quay Sốt Tiêu Đen Hồng Kông", "kho", "tier2", "120.000đ - 175.000đ", "Hong Kong"], ["Cơm Thố Bò Áp Chảo Sốt Tiêu Đen", "kho", "tier2", "110.000đ - 160.000đ", "Hong Kong"], ["Cơm Đùi Gà Nướng Mật Ong Tảng To", "kho", "tier2", "105.000đ - 150.000đ", "Đặc sản nướng"], ["Miến Xào Cua Bể Hải Phòng", "kho", "tier2", "135.000đ - 195.000đ", "Hải Phòng"], ["Mẹt Bún Đậu Mắm Tôm Đại Tiệc Khổng Lồ", "kho", "tier3", "240.000đ - 390.000đ", "Hà Nội Siêu To"], ["Gà Nướng Muối Ớt Nguyên Con Kèm Xôi Chiên", "kho", "tier3", "280.000đ - 450.000đ", "Đặc sản Miền Đông"], ["Cá Tai Tượng Chiên Xù Cuốn Bánh Tráng", "kho", "tier3", "290.000đ - 480.000đ", "Đặc sản Sông Nước"], ["Heo Quay Giòn Bì Cả Đòn Chặt Mẹt", "kho", "tier3", "320.000đ - 490.000đ", "Đại tiệc gia đình"], ["👑 Heo Sữa Quay Giòn Bì Cung Đình Nguyên Con", "kho", "tier4", "950.000đ - 1.800.000đ", "Đại Tiệc Cung Đình"], ["👑 Cơm Thố Bào Ngư Xốt Dầu Hào Thượng Hạng", "kho", "tier4", "550.000đ - 950.000đ", "Quảng Đông VIP"], ["Kimbap Chiên Xù Giòn", "ngoai", "tier1", "45.000đ - 65.000đ", "Korea"], ["Bánh Bạch Tuộc Takoyaki 6 Viên", "ngoai", "tier1", "40.000đ - 60.000đ", "Osaka Japan"], ["Gyoza Bánh Xếp Áp Chảo Nhật", "ngoai", "tier1", "45.000đ - 65.000đ", "Japan"], ["Gỏi Đu Đủ Som Tum Tôm Khô", "ngoai", "tier1", "45.000đ - 70.000đ", "Thai Street"], ["Xôi Xoài Nước Cốt Dừa", "ngoai", "tier1", "45.000đ - 65.000đ", "Bangkok"], ["Bánh Bao Kim Sa Trứng Muối", "ngoai", "tier1", "35.000đ - 55.000đ", "Dimsum"], ["Bánh Kẹp Hotdog Phô Mai Xúc Xích", "ngoai", "tier1", "35.000đ - 50.000đ", "Street food"], ["Bánh Kếp Crepe Chuối Nutella", "ngoai", "tier1", "40.000đ - 60.000đ", "Pháp"], ["Taco Bò Cay Mexico 2 Chiếc", "ngoai", "tier1", "55.000đ - 85.000đ", "Mexico"], ["Burrito Gà Cuộn Phô Mai", "ngoai", "tier1", "60.000đ - 90.000đ", "Mexico"], ["Canh Kim Chi Thịt Heo Đậu Hũ", "ngoai", "tier1", "60.000đ - 90.000đ", "Korea"], ["Mì Tương Đen Jajangmyeon Tô Vừa", "ngoai", "tier1", "55.000đ - 85.000đ", "Korea"], ["Gà Rán Phô Mai K-Food Nửa Con", "ngoai", "tier2", "130.000đ - 190.000đ", "Seoul Korea"], ["Cơm Trộn Bibimbap Thố Đá Nóng Hổi", "ngoai", "tier2", "110.000đ - 165.000đ", "Korea"], ["Lẩu Tokbokki Phô Mai 2 Người", "ngoai", "tier2", "140.000đ - 195.000đ", "Seoul"], ["Cơm Cà Ri Bò Nhật Bản", "ngoai", "tier2", "115.000đ - 165.000đ", "Tokyo"], ["Cơm Lươn Nướng Teriyaki Thố Nhật", "ngoai", "tier2", "145.000đ - 195.000đ", "Japan"], ["Cơm Thịt Heo Chiên Xù Tonkatsu", "ngoai", "tier2", "110.000đ - 160.000đ", "Japan"], ["Pad Thai Tôm Tươi Trứng Chiên", "ngoai", "tier2", "110.000đ - 155.000đ", "Thailand"], ["Canh Tom Yum Kung Tôm Càng", "ngoai", "tier2", "130.000đ - 185.000đ", "Thailand"], ["Cơm Chiên Trái Thơm Hải Sản Thái", "ngoai", "tier2", "115.000đ - 165.000đ", "Thailand"], ["Pizza Bò Pepperoni Phô Mai Cỡ Vừa", "ngoai", "tier2", "135.000đ - 190.000đ", "Italy"], ["Pizza Hải Sản Sốt Pesto Cỡ Vừa", "ngoai", "tier2", "145.000đ - 195.000đ", "Italy"], ["Mì Ý Sốt Bò Bằm Bolognese Thượng Hạng", "ngoai", "tier2", "110.000đ - 160.000đ", "Italy"], ["Mì Ý Sốt Kem Nấm Thịt Xông Khói Carbonara", "ngoai", "tier2", "120.000đ - 170.000đ", "Italy"], ["Burger Bò Phô Mai Tan Chảy 2 Tầng", "ngoai", "tier2", "110.000đ - 165.000đ", "USA Style"], ["Dimsum Há Cảo Tôm Thủy Tinh (Khay 6 Viên)", "ngoai", "tier2", "105.000đ - 150.000đ", "Canton"], ["Xíu Mại Tôm Thịt Trứng Cút Xửng Hấp", "ngoai", "tier2", "100.000đ - 145.000đ", "Canton"], ["Cà Ri Gà Bơ Kèm Bánh Mì Naan Nóng", "ngoai", "tier2", "125.000đ - 180.000đ", "India"], ["Cơm Chiên Biryani Cừu Ấn Độ", "ngoai", "tier2", "140.000đ - 195.000đ", "India"], ["Mì Cay Bạch Tuộc Phô Mai Kéo Sợi", "ngoai", "tier2", "120.000đ - 175.000đ", "Korea"], ["Đậu Phụ Ma Po Tứ Xuyên Cay Nồng", "ngoai", "tier2", "100.000đ - 140.000đ", "Sichuan"], ["Bò Lúc Lắc Kiểu Pháp Khoai Tây Chiên", "ngoai", "tier2", "135.000đ - 190.000đ", "France"], ["Lasagna Bò Phô Mai Bút Lò Ý", "ngoai", "tier2", "130.000đ - 185.000đ", "Italy"], ["Gà Tikka Masala Đậm Vị Kèm Cơm", "ngoai", "tier2", "125.000đ - 180.000đ", "India"], ["Combo Nướng Thịt Ba Chỉ Samgyeopsal Bàn Lớn", "ngoai", "tier3", "280.000đ - 460.000đ", "Korea BBQ"], ["Steak Thăn Bò Mỹ Black Angus Sốt Tiêu 250g", "ngoai", "tier3", "290.000đ - 480.000đ", "American Steak"], ["Sườn Nướng Khổng Lồ Tảng BBQ Kiểu Mỹ", "ngoai", "tier3", "320.000đ - 490.000đ", "BBQ Texas"], ["Set Thuyền Sushi & Sashimi Cá Hồi 18 Miếng", "ngoai", "tier3", "320.000đ - 495.000đ", "Tokyo Feast"], ["Vịt Quay Bắc Kinh Cuốn Bánh Tráng Nửa Con", "ngoai", "tier3", "270.000đ - 420.000đ", "Bắc Kinh"], ["Sườn Cừu Nướng Lá Thơm Rosemary Sốt Vang", "ngoai", "tier3", "350.000đ - 490.000đ", "Pháp"], ["Pizza 4 Loại Phô Mai Mật Ong Cỡ Lớn", "ngoai", "tier3", "230.000đ - 360.000đ", "Italy"], ["Mì Ý Mực Đen Hải Sản Tôm Mực Đĩa Đại", "ngoai", "tier3", "240.000đ - 380.000đ", "Italy"], ["Bò Hầm Rượu Vang Đỏ Kiểu Pháp Thố Lớn", "ngoai", "tier3", "280.000đ - 450.000đ", "France"], ["👑 Cua Hoàng Đế King Crab Hấp Bia Sả Bơ Tỏi", "ngoai", "tier4", "1.350.000đ - 2.000.000đ", "Alaska King"], ["👑 Tôm Hùm Alaska Nướng Bơ Tỏi Phô Mai Đút Lò", "ngoai", "tier4", "750.000đ - 1.350.000đ", "Alaska Lobster"], ["👑 Bò Wagyu A5 Nhật Bản Áp Chảo Muối Hồng", "ngoai", "tier4", "950.000đ - 1.850.000đ", "Kobe Japan"], ["👑 Thuyền Omakase Cá Ngừ Vây Xanh & Nhím Biển", "ngoai", "tier4", "1.100.000đ - 2.000.000đ", "Ginza Tokyo"], ["👑 Sườn Bò Tomahawk Dát Vàng Nướng Than 1.2kg", "ngoai", "tier4", "1.250.000đ - 1.950.000đ", "Dubai Gold"], ["👑 Tháp Hải Sản Hoàng Gia 3 Tầng: Hàu Pháp & King Crab", "ngoai", "tier4", "1.350.000đ - 2.000.000đ", "Monaco VIP"], ["👑 Set Steak Ribeye Wagyu Kèm Gan Ngỗng Béo Foie Gras", "ngoai", "tier4", "950.000đ - 1.750.000đ", "Paris Gourmet"], ["👑 Cua Tuyết Snow Crab Hấp Nước Dừa Xiêm", "ngoai", "tier4", "850.000đ - 1.600.000đ", "Hokkaido VIP"], ["👑 Vịt Quay Bắc Kinh Đệ Nhất Da Giòn Bọc Vàng", "ngoai", "tier4", "550.000đ - 900.000đ", "Bắc Kinh VIP"], ["👑 Set Dimsum Hoàng Gia 12 Món Bọc Vàng Cung Đình", "ngoai", "tier4", "550.000đ - 950.000đ", "Hong Kong VIP"], ["👑 Cá Song Hấp Xì Dầu Hồng Kông Nguyên Con", "ngoai", "tier4", "650.000đ - 1.150.000đ", "Hong Kong VIP"], ["👑 Bò Fosters Úc Thượng Hạng Kèm Rượu Vang Đỏ", "ngoai", "tier4", "750.000đ - 1.400.000đ", "Sydney VIP"], ["👑 Đại Tiệc Buffet Nướng & Hải Sản Bò Mỹ Thượng Hạng", "ngoai", "tier4", "550.000đ - 850.000đ", "Buffet 5 Sao"], ["👑 Gà Đen Hầm Sâm Cao Ly Thuốc Bắc Triều Tiên", "ngoai", "tier4", "550.000đ - 950.000đ", "Seoul Royal"], ["Trà Sữa Trân Châu Đường Đen", "vat", "tier1", "30.000đ - 55.000đ", "Đài Loan"], ["Trà Đào Cam Sả Hạt Chia", "vat", "tier1", "30.000đ - 50.000đ", "Gen Z Hot"], ["Trà Mãng Cầu Tươi Dầm Đá", "vat", "tier1", "30.000đ - 50.000đ", "Trend Hot"], ["Bánh Tráng Nướng Trứng Đà Lạt", "vat", "tier1", "20.000đ - 35.000đ", "Đà Lạt"], ["Bánh Tráng Trộn Bò Khô", "vat", "tier1", "20.000đ - 35.000đ", "Sài Gòn"], ["Bánh Tráng Cuốn Bơ Sốt Me", "vat", "tier1", "20.000đ - 35.000đ", "Sài Gòn"], ["Nem Chua Rán Hà Nội", "vat", "tier1", "35.000đ - 55.000đ", "Hà Nội"], ["Cá Viên Chiên Mắm Tỏi Ớt", "vat", "tier1", "35.000đ - 60.000đ", "Sài Gòn"], ["Bắp Xào Tép Bơ Mỡ Hành", "vat", "tier1", "25.000đ - 40.000đ", "Hồ Con Rùa"], ["Chè Khúc Bạch Hạnh Nhân", "vat", "tier1", "30.000đ - 45.000đ", "Thanh mát"], ["Chè Bưởi An Giang", "vat", "tier1", "25.000đ - 40.000đ", "An Giang"], ["Tàu Hũ Trân Châu Gừng Nóng", "vat", "tier1", "20.000đ - 35.000đ", "Dân dã"], ["Gỏi Cuốn Tôm Thịt Tươi", "vat", "tier1", "30.000đ - 50.000đ", "Sài Gòn"], ["Chân Gà Sả Tắc Cay Nồng", "vat", "tier1", "45.000đ - 75.000đ", "Ăn vặt cực dính"], ["Khoai Lang Kén Chiên Mè", "vat", "tier1", "25.000đ - 40.000đ", "Ăn vặt"], ["Kem Bơ Sầu Riêng Đà Lạt", "vat", "tier1", "35.000đ - 55.000đ", "Đà Lạt"], ["Bánh Chuối Chiên Phồng Giòn", "vat", "tier1", "15.000đ - 25.000đ", "Đường phố"], ["Xiên Bẩn Cổng Trường Đầy Đủ", "vat", "tier1", "30.000đ - 50.000đ", "Tuổi thơ"], ["Bánh Giò Nóng Thịt Nấm", "vat", "tier1", "20.000đ - 35.000đ", "Hà Nội"], ["Hột Vịt Lộn Xào Me", "vat", "tier1", "25.000đ - 40.000đ", "Quốc hồn quốc túy"], ["Trà Sữa Oolong Nướng", "vat", "tier1", "35.000đ - 55.000đ", "Đài Loan"], ["Sinh Tố Bơ Đậm Đặc", "vat", "tier1", "35.000đ - 55.000đ", "Đắk Lắk"], ["Bánh Rán Mật Đường Phố Cổ", "vat", "tier1", "15.000đ - 25.000đ", "Hà Nội"], ["Bánh Tiêu Sữa Đậu Nành", "vat", "tier1", "15.000đ - 25.000đ", "Chợ Lớn"], ["Bánh Quẩy Nóng Giòn Tan", "vat", "tier1", "15.000đ - 25.000đ", "Hà Nội"], ["Bánh Khoai Mỡ Chiên Giòn", "vat", "tier1", "20.000đ - 30.000đ", "Ăn vặt"], ["Khoai Tây Lắc Phô Mai Bột", "vat", "tier1", "30.000đ - 45.000đ", "Ăn vặt"], ["Gà Popcorn Lắc Phô Mai", "vat", "tier1", "40.000đ - 65.000đ", "K-Food"], ["Bánh Đồng Xu Phô Mai Kéo Sợi", "vat", "tier1", "30.000đ - 40.000đ", "Trend Hot"], ["Bánh Trứng Gà Non Hong Kong", "vat", "tier1", "30.000đ - 45.000đ", "Hong Kong"], ["Kem Gelato Ý Đủ Vị", "vat", "tier1", "45.000đ - 75.000đ", "Ý"], ["Sữa Chua Dẻo Trái Cây", "vat", "tier1", "30.000đ - 45.000đ", "Hà Nội"], ["Sữa Chua Trân Châu Hạ Long", "vat", "tier1", "30.000đ - 45.000đ", "Hạ Long"], ["Chè Thái Sầu Riêng Ngập Topping", "vat", "tier1", "35.000đ - 55.000đ", "Đà Nẵng"], ["Chè Dừa Dầm Hải Phòng", "vat", "tier1", "30.000đ - 45.000đ", "Hải Phòng"], ["Chè Sương Sa Hạt Lựu", "vat", "tier1", "25.000đ - 40.000đ", "Nam Bộ"], ["Trà Chanh Giã Tay Quảng Đông", "vat", "tier1", "25.000đ - 40.000đ", "Trend Hot"], ["Trà Tắc Xí Muội Mát Lạnh", "vat", "tier1", "20.000đ - 35.000đ", "Sài Gòn"], ["Trà Dâu Tằm Dầm Đá", "vat", "tier1", "25.000đ - 40.000đ", "Đà Lạt"], ["Bánh Bột Lọc Chiên Giòn", "vat", "tier1", "25.000đ - 40.000đ", "Huế"], ["Trứng Cút Lộn Xào Me", "vat", "tier1", "30.000đ - 45.000đ", "Ăn vặt"], ["Bò Bía Ngọt Giòn Cơm Dừa", "vat", "tier1", "15.000đ - 25.000đ", "Hà Nội"], ["Bánh Kẹp Lá Dứa Nóng Hổi", "vat", "tier1", "20.000đ - 35.000đ", "Sài Gòn"], ["Xôi Chiên Phồng Chà Bông", "vat", "tier1", "25.000đ - 40.000đ", "Nam Bộ"], ["Chả Ram Tôm Đất Giòn Rụm", "vat", "tier1", "40.000đ - 65.000đ", "Bình Định"], ["Bánh Tráng Chấm Mỡ Hành Trứng Cút", "vat", "tier1", "20.000đ - 35.000đ", "Sài Gòn"], ["Bánh Tráng Xì Ke Muối Tỏi", "vat", "tier1", "15.000đ - 25.000đ", "Tây Ninh"], ["Xoài Lắc Muối Tôm", "vat", "tier1", "25.000đ - 35.000đ", "Sài Gòn"], ["Cóc Bao Tử Dầm Chua Ngọt", "vat", "tier1", "25.000đ - 35.000đ", "Ăn vặt"], ["Mận Lắc Muối Tây Ninh", "vat", "tier1", "30.000đ - 45.000đ", "Hà Nội"], ["Ổi Bo Dầm Xí Muội", "vat", "tier1", "20.000đ - 35.000đ", "Ăn vặt"], ["Bánh Mì Nướng Muối Ớt", "vat", "tier1", "20.000đ - 35.000đ", "Sài Gòn"], ["Bánh Donut Phủ Socola", "vat", "tier1", "25.000đ - 40.000đ", "Bakery"], ["Bánh Su Kem Vani Mát Lạnh", "vat", "tier1", "25.000đ - 40.000đ", "Bakery"], ["Chè Bánh Trôi Nước Đường Mật", "vat", "tier1", "25.000đ - 40.000đ", "Dân dã"], ["Chè Đậu Đỏ Nước Cốt Dừa", "vat", "tier1", "25.000đ - 40.000đ", "Thất Tịch"], ["Trà Sữa Khoai Môn Dẻo", "vat", "tier1", "35.000đ - 55.000đ", "Đài Loan"], ["Cà Phê Muối Xứ Huế", "vat", "tier1", "25.000đ - 40.000đ", "Huế"], ["Cà Phê Trứng Béo Ngậy", "vat", "tier1", "35.000đ - 50.000đ", "Hà Nội"], ["Trà Hoa Cúc Mật Ong Nóng", "vat", "tier1", "30.000đ - 45.000đ", "Hà Nội"], ["Ốc Hương Xào Trứng Muối Đĩa Lớn", "vat", "tier2", "130.000đ - 190.000đ", "Quán Ốc Sài Gòn"], ["Ốc Móng Tay Xào Muống Tỏi Đĩa Đại", "vat", "tier2", "110.000đ - 160.000đ", "Hải sản vỉa hè"], ["Càng Ghẹ Rang Muối Ớt Cay Xé Lưỡi", "vat", "tier2", "140.000đ - 195.000đ", "Nha Trang"], ["Hàu Nướng Mỡ Hành Đậu Phộng (Nửa Dozen 6 Con)", "vat", "tier2", "110.000đ - 160.000đ", "Quảng Ninh"], ["Sò Điệp Nướng Trứng Cút Phô Mai (6 Con)", "vat", "tier2", "120.000đ - 175.000đ", "Nha Trang"], ["Bạch Tuộc Nướng Sa Tế Đĩa Lớn", "vat", "tier2", "135.000đ - 190.000đ", "Nướng ngói"], ["Mực Nướng Muối Ớt Xé Sợi Nguyên Con", "vat", "tier2", "145.000đ - 195.000đ", "Phan Thiết"], ["Nem Nướng Nha Trang Cuốn Bánh Mẹt Đôi", "vat", "tier2", "120.000đ - 170.000đ", "Nha Trang"], ["Combo Chân Gà Sả Tắc & Nem Chua Rán Khổng Lồ", "vat", "tier2", "110.000đ - 165.000đ", "Ăn vặt hội nhóm"], ["Mâm Hải Sản Nướng Mỡ Hành Phô Mai Tổng Hợp", "vat", "tier3", "320.000đ - 490.000đ", "Đại tiệc nướng ốc"], ["Mâm Ốc Hương Rang Muối Ớt Siêu To Khổng Lồ", "vat", "tier3", "280.000đ - 450.000đ", "Ốc Đêm Sài Gòn"], ["Mâm Nem Nướng Nha Trang Đại Tiệc 4 Người", "vat", "tier3", "250.000đ - 390.000đ", "Nha Trang Feast"], ["👑 Yến Sào Chưng Đường Phèn Hạt Sen Táo Đỏ Hoàng Gia", "vat", "tier4", "550.000đ - 1.100.000đ", "Khánh Hòa Thượng Hạng"], ["👑 Cua Lột Chiên Giòn Sốt Trứng Muối Hoàng Kim", "vat", "tier4", "520.000đ - 850.000đ", "Hải Sản Cao Cấp"], ["Salad Ức Gà Sốt Mè Rang", "healthy", "tier1", "45.000đ - 70.000đ", "Eat Clean"], ["Cơm Gạo Lứt Bò Áp Chảo", "healthy", "tier1", "55.000đ - 85.000đ", "Fitness Meal"], ["Bún Gạo Lứt Trộn Ức Gà", "healthy", "tier1", "45.000đ - 70.000đ", "Eat Clean"], ["Bánh Mì Đen Quả Bơ Trứng Chần", "healthy", "tier1", "45.000đ - 70.000đ", "Healthy Breakfast"], ["Gỏi Cuốn Chay Nấm Đậu Hũ", "healthy", "tier1", "30.000đ - 50.000đ", "Ăn chay thanh tịnh"], ["Salad Tôm Nướng Giấm Balsamic", "healthy", "tier1", "55.000đ - 85.000đ", "Mediterranean"], ["Cháo Yến Mạch Ức Gà Xé", "healthy", "tier1", "40.000đ - 65.000đ", "Low Calo"], ["Bún Nấm Chay Thanh Đạm", "healthy", "tier1", "35.000đ - 55.000đ", "Thuần chay"], ["Smoothie Bowl Chuối Việt Quất Hạt Chia", "healthy", "tier1", "50.000đ - 75.000đ", "Detox Bowl"], ["Súp Bí Đỏ Hạt Sen Nấu Nấm", "healthy", "tier1", "35.000đ - 55.000đ", "Dinh dưỡng"], ["Bún Chả Nấm Chay Nướng", "healthy", "tier1", "40.000đ - 60.000đ", "Ăn chay"], ["Canh Rong Biển Đậu Hũ Thịt Bằm", "healthy", "tier1", "35.000đ - 55.000đ", "Hàn Quốc"], ["Salad Cá Ngừ Ngô Ngọt", "healthy", "tier1", "45.000đ - 70.000đ", "Keto"], ["Miến Dong Trộn Rau Củ Chay", "healthy", "tier1", "35.000đ - 55.000đ", "Thuần chay"], ["Bánh Mì Đen Bơ Đậu Phộng Chuối", "healthy", "tier1", "35.000đ - 55.000đ", "Năng lượng"], ["Súp Lơ Xanh Luộc Chấm Trứng Dầm", "healthy", "tier1", "30.000đ - 45.000đ", "Thanh đạm"], ["Canh Cải Cúc Thịt Nạc", "healthy", "tier1", "30.000đ - 45.000đ", "Bữa cơm mẹ"], ["Canh Mướp Nấu Tôm Tươi", "healthy", "tier1", "35.000đ - 50.000đ", "Mát ruột"], ["Cháo Đậu Xanh Thịt Bằm", "healthy", "tier1", "30.000đ - 45.000đ", "Giải cảm"], ["Cháo Yến Mạch Hạt Chia Sữa Tươi", "healthy", "tier1", "35.000đ - 50.000đ", "Healthy Eat"], ["Salad Bơ Trứng Gà Sốt Chanh Dây", "healthy", "tier1", "40.000đ - 65.000đ", "Eat Clean"], ["Gỏi Ngó Sen Tôm Thịt Ít Béo", "healthy", "tier1", "50.000đ - 75.000đ", "Healthy"], ["Cơm Gạo Lứt Ức Gà Xào Nấm", "healthy", "tier1", "50.000đ - 75.000đ", "Gym Diet"], ["Cơm Chay Thập Cẩm Rau Nấm", "healthy", "tier1", "35.000đ - 55.000đ", "Ăn chay"], ["Bún Đậu Hũ Kho Nấm Rơm", "healthy", "tier1", "35.000đ - 55.000đ", "Ăn chay"], ["Hủ Tiếu Chay Nước Lèo Củ Quả", "healthy", "tier1", "35.000đ - 55.000đ", "Ăn chay"], ["Bánh Canh Nấm Chay Nước Trong", "healthy", "tier1", "35.000đ - 55.000đ", "Ăn chay"], ["Canh Chua Chay Bạc Hà Đậu Bắp", "healthy", "tier1", "35.000đ - 50.000đ", "Ăn chay"], ["Chả Lụa Chay Cuốn Rau Mầm", "healthy", "tier1", "35.000đ - 55.000đ", "Ăn chay"], ["Đậu Hũ Hấp Rau Củ Nước Tương", "healthy", "tier1", "30.000đ - 45.000đ", "Ăn chay"], ["Bông Cải Xào Ức Gà Dầu Oliu", "healthy", "tier1", "45.000đ - 70.000đ", "Keto Meal"], ["Salad Ức Gà Sốt Sữa Chua Hy Lạp", "healthy", "tier1", "50.000đ - 75.000đ", "Eat Clean"], ["Cơm Lứt Trộn Rau Củ Cầu Vồng", "healthy", "tier1", "45.000đ - 70.000đ", "Rainbow Diet"], ["Canh Bí Đao Nấu Tôm Giảm Cân", "healthy", "tier1", "35.000đ - 50.000đ", "Giảm mỡ"], ["Bún Tươi Nước Dùng Rau Củ Quả", "healthy", "tier1", "35.000đ - 50.000đ", "Thanh lọc"], ["Súp Nấm Tuyết Hạt Sen Chay", "healthy", "tier1", "35.000đ - 55.000đ", "Dưỡng nhan"], ["Poke Bowl Cá Hồi Quả Bơ Size Lớn", "healthy", "tier2", "135.000đ - 190.000đ", "Hawaii Poke"], ["Poke Bowl Tôm Luộc Quả Bơ Trứng Cút", "healthy", "tier2", "120.000đ - 170.000đ", "Hawaii Poke"], ["Cơm Gạo Lứt Cá Hồi Áp Chảo Măng Tây", "healthy", "tier2", "145.000đ - 195.000đ", "Omega-3 Diet"], ["Cơm Gạo Lứt Gà Nướng Teriyaki Sốt Bơ", "healthy", "tier2", "110.000đ - 160.000đ", "Fit Meal"], ["Salad Bò Áp Chảo Trái Bơ & Hạt Óc Chó", "healthy", "tier2", "125.000đ - 180.000đ", "Keto Feast"], ["Mâm Lẩu Nấm Chay Thiên Nhiên 8 Loại Nấm Quý", "healthy", "tier3", "280.000đ - 450.000đ", "Thanh Lọc Cơ Thể"], ["Set Đại Tiệc Chay Hoàng Cung 10 Món Dưỡng Sinh", "healthy", "tier3", "320.000đ - 480.000đ", "Cung Đình Chay"], ["👑 Set Dưỡng Nhan Hoàng Cung: Yến Sào & Đông Trùng", "healthy", "tier4", "850.000đ - 1.650.000đ", "Hoàng Gia VIP"]];
 
-        // 2. HỆ THỐNG HÌNH ẢNH 100% CHUẨN XÁC NỘI BỘ (ĐÃ TỐI ƯU CỰC NHẸ & CHUẨN MÓN)
+    // 2. HỆ THỐNG HÌNH ẢNH 100% CHUẨN XÁC NỘI BỘ (ĐÃ TỐI ƯU CỰC NHẸ & CHUẨN MÓN)
     const foodAssetRules = [
+      // VIP Luxury (500k - 2TR)
+      { kws: ['cua hoàng đế', 'king crab', 'tôm hùm', 'tháp hải sản', 'cua tuyết', 'snow crab', 'cua pha lê', 'tôm càng', 'tôm'], img: 'assets/food/tom_hum.jpg', alt: 'https://images.unsplash.com/photo-1559847844-5315695dadae?auto=format&fit=crop&w=800&q=80' },
+      { kws: ['wagyu', 'tomahawk', 'fosters úc', 'gan ngỗng', 'sườn cừu', 'bò lúc lắc'], img: 'assets/food/bo_wagyu.jpg', alt: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80' },
+      { kws: ['omakase', 'otoro', 'nhím biển'], img: 'assets/food/sushi.jpg', alt: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=800&q=80' },
+      { kws: ['yến sào', 'bào ngư', 'đông trùng'], img: 'assets/food/chao.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/6/67/Vietnamese_chao.JPG' },
+
       // Phở & Bún bò
       { kws: ['phở bò', 'bò sốt vang', 'bò tái', 'phở tái', 'bò gầu'], img: 'assets/food/pho_bo.jpg', alt: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?auto=format&fit=crop&w=800&q=80' },
       { kws: ['phở gà', 'miến gà', 'miến'], img: 'assets/food/pho_ga.jpg', alt: 'https://images.unsplash.com/photo-1594998893017-36147cbcae05?auto=format&fit=crop&w=800&q=80' },
@@ -385,8 +347,8 @@
       { kws: ['mì quảng'], img: 'assets/food/mi_quang.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/d/df/Mi_Quang_1A_Danang.jpg' },
 
       // Cơm tấm & Cơm gà & Cơm chiên
-      { kws: ['cơm tấm', 'sườn bì', 'heo quay bì', 'sườn non rim', 'macao'], img: 'assets/food/com_tam.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/b/b0/C%C6%A1m_T%E1%BA%A5m%2C_Da_Nang%2C_Vietnam.jpg' },
-      { kws: ['cơm gà', 'gà xối mỡ', 'gà xé', 'cơm lam gà'], img: 'assets/food/com_ga.jpg', alt: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=800&q=80' },
+      { kws: ['cơm tấm', 'sườn bì', 'heo quay', 'sườn non rim', 'macao', 'heo sữa'], img: 'assets/food/com_tam.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/b/b0/C%C6%A1m_T%E1%BA%A5m%2C_Da_Nang%2C_Vietnam.jpg' },
+      { kws: ['cơm gà', 'gà xối mỡ', 'gà xé', 'cơm lam gà', 'gà nướng'], img: 'assets/food/com_ga.jpg', alt: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=800&q=80' },
       { kws: ['cơm rang', 'cơm chiên'], img: 'assets/food/com_rang.jpg', alt: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80' },
       { kws: ['cơm niêu', 'cơm thố', 'cơm cháy', 'kho tộ', 'thịt kho tàu'], img: 'assets/food/com_tam.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/b/b0/C%C6%A1m_T%E1%BA%A5m%2C_Da_Nang%2C_Vietnam.jpg' },
       { kws: ['cơm'], img: 'assets/food/com_tam.jpg', alt: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80' },
@@ -406,15 +368,15 @@
 
       // Lẩu & Cháo & Súp
       { kws: ['lẩu'], img: 'assets/food/lau.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/a/aa/Day177lilybday.JPG' },
-      { kws: ['cháo', 'súp cua', 'súp bào ngư', 'bong bóng cá'], img: 'assets/food/chao.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/6/67/Vietnamese_chao.JPG' },
+      { kws: ['cháo', 'súp cua', 'súp bào ngư', 'bong bóng cá', 'súp nấm', 'súp bí đỏ'], img: 'assets/food/chao.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/6/67/Vietnamese_chao.JPG' },
 
-      // Ăn vặt đường phố Gen Z (Chuẩn từng món)
+      // Ăn vặt đường phố Gen Z
       { kws: ['bánh tráng nướng'], img: 'assets/food/banh_trang_nuong.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/3/36/B%C3%A1nh_tr%C3%A1ng_1.jpg' },
       { kws: ['bánh tráng trộn', 'bánh tráng cuốn', 'bánh tráng chấm', 'bánh tráng xì ke', 'bò bía'], img: 'assets/food/banh_trang_tron.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/6/63/Vietnamese_%22banh_trang_tron%22.JPG' },
       { kws: ['bánh tráng'], img: 'assets/food/banh_trang_nuong.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/3/36/B%C3%A1nh_tr%C3%A1ng_1.jpg' },
       { kws: ['chân gà'], img: 'assets/food/chan_ga.jpg', alt: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=800&q=80' },
       { kws: ['hột vịt lộn', 'trứng vịt lộn', 'cút lộn'], img: 'assets/food/hot_vit_lon.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/e/eb/Hotvitlon.jpg' },
-      { kws: ['ốc', 'sò', 'hàu', 'ghẹ', 'bạch tuộc', 'mực nướng', 'cá tai tượng'], img: 'assets/food/oc_hai_san.jpg', alt: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80' },
+      { kws: ['ốc', 'sò', 'hàu', 'ghẹ', 'bạch tuộc', 'mực nướng', 'cá tai tượng', 'cá song', 'cua lột', 'hải sản'], img: 'assets/food/oc_hai_san.jpg', alt: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=800&q=80' },
       { kws: ['nem chua', 'cá viên', 'xiên bẩn', 'bắp xào', 'khoai lang kén', 'khoai tây lắc', 'chả ram', 'nem nướng', 'đồng xu'], img: 'assets/food/nem_chua_ran.jpg', alt: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80' },
       { kws: ['gỏi cuốn', 'gỏi ngó sen'], img: 'assets/food/goi_cuon.jpg', alt: 'https://upload.wikimedia.org/wikipedia/commons/0/03/Summer_roll.jpg' },
 
@@ -435,14 +397,13 @@
       { kws: ['pizza'], img: 'assets/food/pizza.jpg', alt: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80' },
       { kws: ['mì ý', 'spaghetti', 'bolognese', 'carbonara', 'lasagna', 'risotto', 'pasta'], img: 'assets/food/pasta.jpg', alt: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80' },
       { kws: ['burger', 'hotdog'], img: 'assets/food/burger.jpg', alt: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80' },
-      { kws: ['steak', 'sườn nướng', 'sườn cừu', 'bò lúc lắc', 'bò hầm'], img: 'assets/food/steak.jpg', alt: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80' },
+      { kws: ['steak', 'sườn nướng', 'bò hầm'], img: 'assets/food/steak.jpg', alt: 'https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=800&q=80' },
 
       // Healthy & Đồ chay
       { kws: ['salad', 'poke', 'gạo lứt', 'yến mạch', 'smoothie'], img: 'assets/food/salad_healthy.jpg', alt: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80' },
-      { kws: ['chay', 'nấm', 'rong biển', 'đậu hũ', 'bông cải', 'rau củ', 'canh cải', 'canh mướp', 'bí đao', 'rau mầm', 'súp lơ'], img: 'assets/food/do_chay.jpg', alt: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80' }
+      { kws: ['chay', 'nấm', 'rong biển', 'đậu hũ', 'bông cải', 'rau củ', 'canh cải', 'canh mướp', 'bí đao', 'rau mầm', 'súp lơ', 'gà đen hầm sâm'], img: 'assets/food/do_chay.jpg', alt: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80' }
     ];
 
-    // Hàm tra cứu ảnh chuẩn xác 100% dựa vào tên món ăn
     function getAccurateDishPhotos(dishName) {
       const lower = dishName.toLowerCase();
       for (const item of foodAssetRules) {
@@ -461,32 +422,47 @@
       };
     }
 
-    // 3. KHỞI TẠO 300 MÓN VÀO MẢNG CHUNG
+    // 3. KHỞI TẠO 300 MÓN VÀO MẢNG CHUNG KÈM PRICE TIER
     const fullDatabase300 = [];
     let idCounter = 1;
     const catDisplayNames = {
       nuoc: '🍜 Đồ Nước', kho: '🍚 Cơm & Khô', ngoai: '🌏 Món Ngoại', vat: '🧋 Ăn Vặt', healthy: '🥗 Healthy'
     };
+    const tierDisplayNames = {
+      tier1: '🟢 20k - 100k (Bình dân)',
+      tier2: '🔵 100k - 200k (No nê)',
+      tier3: '🟣 200k - 500k (Lẩu nướng)',
+      tier4: '👑 500k - 2TR (VIP Sang chảnh)'
+    };
+    const tierBadgeColors = {
+      tier1: '#10b981',
+      tier2: '#38bdf8',
+      tier3: '#c084fc',
+      tier4: '#fbbf24'
+    };
 
-    for (const [catKey, nameList] of Object.entries(rawDishNames)) {
-      nameList.forEach((dishName, idx) => {
-        const photos = getAccurateDishPhotos(dishName);
-        fullDatabase300.push({
-          id: idCounter++,
-          cat: catKey,
-          catName: catDisplayNames[catKey],
-          name: dishName,
-          price: (35 + (idx % 7) * 10) + 'k - ' + (55 + (idx % 7) * 15) + 'k',
-          origin: catDisplayNames[catKey] + ' • Món ngon tuyển chọn',
-          fill: (idx % 3 === 0) ? '⭐⭐⭐⭐⭐' : (idx % 2 === 0 ? '⭐⭐⭐⭐' : '⭐⭐⭐'),
-          time: (10 + (idx % 4) * 5) + 'p',
-          img: photos.primary,
-          altImg: photos.alt
-        });
+    rawDishCatalog.forEach((item, idx) => {
+      const [dishName, catKey, priceTier, priceText, originText] = item;
+      const photos = getAccurateDishPhotos(dishName);
+      fullDatabase300.push({
+        id: idCounter++,
+        cat: catKey,
+        catName: catDisplayNames[catKey],
+        priceTier: priceTier,
+        priceTierName: tierDisplayNames[priceTier],
+        tierColor: tierBadgeColors[priceTier],
+        name: dishName,
+        price: priceText,
+        origin: originText,
+        fill: (priceTier === 'tier4') ? '👑 Đẳng Cấp Hoàng Gia' : ((idx % 3 === 0) ? '⭐⭐⭐⭐⭐' : '⭐⭐⭐⭐'),
+        time: (priceTier === 'tier4' ? '30 - 45p' : (priceTier === 'tier3' ? '25 - 35p' : (10 + (idx % 3) * 5) + 'p')),
+        img: photos.primary,
+        altImg: photos.alt
       });
-    }
+    });
 
-    let currentFilter = 'all';
+    let currentCategory = 'all';
+    let currentPriceTier = 'all';
     let filteredList = [...fullDatabase300];
     let cfTenDishes = [];
     let isCFShuffling = false;
@@ -551,17 +527,22 @@
       const ggMapsLink = document.getElementById('modalGoogleMapsLink');
 
       title.innerText = dish.name;
-      catBadge.innerText = `${dish.catName} • ${dish.price}`;
+      catBadge.innerHTML = `${dish.catName} • <span style="color: ${dish.tierColor}">${dish.priceTierName}</span>`;
       price.innerText = dish.price;
       origin.innerText = dish.origin;
       time.innerText = dish.time;
       verifiedBadge.innerText = `Ảnh chuẩn: ${dish.name}`;
 
       // Link Google Images & Maps trực tiếp theo đúng tên món
-      ggImgLink.href = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(dish.name)}`;
+      ggImgLink.href = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(dish.name + ' ngon')}`;
       ggMapsLink.href = `https://www.google.com/maps/search/${encodeURIComponent(dish.name + ' gần đây')}`;
 
       // Gán ảnh chuẩn xác 100%
+      img.onerror = function() {
+        if (dish.altImg && this.src !== dish.altImg) {
+          this.src = dish.altImg;
+        }
+      };
       img.src = dish.img;
       modal.classList.remove('hidden');
     }
@@ -594,7 +575,7 @@
                 <div class="h-14 bg-cover bg-center transition-all duration-300" id="cardImg-${i}"></div>
                 <div class="p-1 flex-1 flex flex-col justify-between">
                   <div class="text-[9.5px] font-black text-white leading-tight line-clamp-2" id="cardTitle-${i}">Món</div>
-                  <div class="text-[8.5px] text-[#ffd700] font-black" id="cardPrice-${i}">45k</div>
+                  <div class="text-[8px] font-black truncate" id="cardPrice-${i}">45k</div>
                 </div>
               </div>
             </div>
@@ -602,17 +583,24 @@
         `;
       }
       container.innerHTML = html;
-      load10CardsData();
     }
 
     function load10CardsData() {
+      if (filteredList.length === 0) filteredList = [...fullDatabase300];
       const shuffled = [...filteredList].sort(() => 0.5 - Math.random());
-      cfTenDishes = shuffled.slice(0, 10);
+      
+      // Đảm bảo luôn lấy đủ 10 thẻ ngay cả khi lọc tập nhỏ
+      cfTenDishes = [];
+      for (let i = 0; i < 10; i++) {
+        cfTenDishes.push(shuffled[i % shuffled.length]);
+      }
 
       for (let i = 0; i < 10; i++) {
-        const dish = cfTenDishes[i] || filteredList[0];
+        const dish = cfTenDishes[i];
         document.getElementById(`cardTitle-${i}`).innerText = dish.name;
-        document.getElementById(`cardPrice-${i}`).innerText = dish.price;
+        const priceEl = document.getElementById(`cardPrice-${i}`);
+        priceEl.innerText = dish.price;
+        priceEl.style.color = dish.tierColor;
         document.getElementById(`cardImg-${i}`).style.backgroundImage = `url('${dish.img}')`;
         
         const inner = document.getElementById(`cardInner-${i}`);
@@ -623,69 +611,66 @@
 
       hasPickedCard = false;
       document.getElementById('cfInstructionBadge').innerText = "⚡ BẤM NÚT ĐỂ TRÁO 10 LÁ BÀI";
-      document.getElementById('cfInstructionBadge').className = "px-3 py-0.5 bg-[#e63946] text-white text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block";
-      document.getElementById('cfSubInstruction').innerText = "Tráo 10 lá bài bí ẩn từ kho 300 món rồi chạm chọn 1 lá!";
-      document.getElementById('cfChosenResult').innerText = "";
+      document.getElementById('cfInstructionBadge').className = "px-3 py-0.5 bg-[#ffd700] text-black text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block";
+      document.getElementById('cfChosenResult').innerHTML = "Chưa lật thẻ nào! Hãy bấm tráo bài.";
+      document.getElementById('cfActionBtn').innerText = "⚡ TRÁO 10 THẺ BÀI (XÁO BÀI CF)";
     }
 
     function startCFShuffle() {
       if (isCFShuffling) return;
       isCFShuffling = true;
       hasPickedCard = false;
-      playTickSound();
 
+      // Đóng lật các lá bài
       for (let i = 0; i < 10; i++) {
-        document.getElementById(`cardInner-${i}`).classList.remove('is-flipped');
-        document.getElementById(`cardInner-${i}`).parentElement.classList.remove('vip-gold-glow');
-        document.getElementById(`cardInner-${i}`).parentElement.style.opacity = '1';
+        const cardInner = document.getElementById(`cardInner-${i}`);
+        cardInner.classList.remove('is-flipped');
+        cardInner.parentElement.classList.remove('vip-gold-glow');
+        cardInner.parentElement.style.opacity = '1';
       }
 
-      const grid = document.getElementById('cfCardsGrid');
-      grid.classList.add('is-shuffling-deck');
+      const badge = document.getElementById('cfInstructionBadge');
+      badge.className = "px-3 py-0.5 bg-[#ff2a85] text-white text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block animate-pulse";
+      badge.innerText = "⏳ ĐANG XÁO BÀI THEO HIỆU ỨNG ĐỘT KÍCH...";
+      document.getElementById('cfChosenResult').innerHTML = "Đang tráo đổi vị trí...";
 
-      const btn = document.getElementById('cfActionBtn');
-      btn.disabled = true;
-      btn.innerText = "🌪️ ĐANG TRÁO 10 LÁ BÀI TỐC ĐỘ CAO...";
-      document.getElementById('cfInstructionBadge').innerText = "⏳ ĐANG TRÁO 10 LÁ BÁU VẬT...";
-
-      const shuffleTicker = setInterval(playTickSound, 120);
+      // Hiệu ứng sóng tráo thẻ
+      for (let i = 0; i < 10; i++) {
+        setTimeout(() => {
+          playTickSound();
+          const cardParent = document.getElementById(`cardInner-${i}`).parentElement;
+          cardParent.classList.add('shuffle-wave');
+          setTimeout(() => {
+            cardParent.classList.remove('shuffle-wave');
+          }, 500);
+        }, i * 80);
+      }
 
       setTimeout(() => {
-        clearInterval(shuffleTicker);
-        grid.classList.remove('is-shuffling-deck');
-        
-        const shuffled = [...filteredList].sort(() => 0.5 - Math.random());
-        cfTenDishes = shuffled.slice(0, 10);
-        for (let i = 0; i < 10; i++) {
-          const dish = cfTenDishes[i] || filteredList[0];
-          document.getElementById(`cardTitle-${i}`).innerText = dish.name;
-          document.getElementById(`cardPrice-${i}`).innerText = dish.price;
-          document.getElementById(`cardImg-${i}`).style.backgroundImage = `url('${dish.img}')`;
-        }
-
+        load10CardsData();
         isCFShuffling = false;
-        btn.disabled = false;
-        btn.innerText = "👉 CHỌN 1 TRONG 10 LÁ BÀI TRÊN MÀN HÌNH!";
-        
-        document.getElementById('cfInstructionBadge').innerText = "🎯 CHẠM VÀO 1 LÁ BÀI ĐỂ LẬT!";
-        document.getElementById('cfInstructionBadge').className = "px-3 py-0.5 bg-[#ffd700] text-black text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block animate-bounce";
-        document.getElementById('cfSubInstruction').innerText = "Linh cảm mách bảo bạn chọn lá bài nào?";
+        badge.className = "px-3 py-0.5 bg-[#00f0ff] text-black text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block";
+        badge.innerText = "👉 CHỌN NGAY 1 LÁ BÀI BẠN TIN TƯỞNG!";
+        document.getElementById('cfChosenResult').innerHTML = "<span class='text-white font-bold'>Hãy chạm vào 1 lá bài bất kỳ để chốt món!</span>";
+        document.getElementById('cfActionBtn').innerText = "🔄 TRÁO LẠI BÀI";
       }, 1000);
     }
 
     function onCard10Click(index) {
-      if (isCFShuffling || hasPickedCard) return;
+      if (isCFShuffling) return;
+      if (hasPickedCard) return;
+
       hasPickedCard = true;
+      playTickSound();
 
       const chosenDish = cfTenDishes[index];
       const targetCard = document.getElementById(`cardInner-${index}`);
-      
       targetCard.classList.add('is-flipped');
       targetCard.parentElement.classList.add('vip-gold-glow');
 
       document.getElementById('cfInstructionBadge').className = "px-3 py-0.5 bg-[#00f0ff] text-black text-[11px] font-black rounded-full border border-black hard-shadow uppercase tracking-wider inline-block";
       document.getElementById('cfInstructionBadge').innerText = "🎉 BÁU VẬT ĐÃ MỞ!";
-      document.getElementById('cfChosenResult').innerHTML = `ĐÃ TRÚNG: <span class="text-[#ffd700] underline font-black ml-1">${chosenDish.name}</span>!`;
+      document.getElementById('cfChosenResult').innerHTML = `ĐÃ TRÚNG: <span class="text-[#ffd700] underline font-black ml-1">${chosenDish.name}</span> (${chosenDish.price})!`;
 
       // Sau 700ms, tự động hé mở 9 lá bài còn lại
       setTimeout(() => {
@@ -713,17 +698,21 @@
     let startAngle30 = 0;
 
     function shuffle30Pool() {
+      if (filteredList.length === 0) filteredList = [...fullDatabase300];
       const shuffled = [...filteredList].sort(() => 0.5 - Math.random());
-      pool30Dishes = shuffled.slice(0, Math.min(30, shuffled.length));
+      pool30Dishes = [];
+      for (let i = 0; i < 30; i++) {
+        pool30Dishes.push(shuffled[i % shuffled.length]);
+      }
       drawRoulette30();
       const res = document.getElementById('spinResult');
-      if (res) res.innerText = `Đã nạp 30 món mới từ kho ${filteredList.length} món!`;
+      if (res) res.innerText = `Đã nạp 30 món vào vòng quay từ kho ${filteredList.length} món!`;
     }
 
     function drawRoulette30() {
       if (pool30Dishes.length === 0) shuffle30Pool();
       const canvas = document.getElementById("rouletteCanvas");
-      if (!canvas.getContext) return;
+      if (!canvas || !canvas.getContext) return;
       const ctx = canvas.getContext("2d");
       ctx.clearRect(0, 0, 260, 260);
 
@@ -741,12 +730,12 @@
 
         ctx.save();
         ctx.fillStyle = (i % 3 === 1 || i % 3 === 2) ? "#000" : "#fff";
-        ctx.font = "bold 8.5px sans-serif";
+        ctx.font = "bold 8px sans-serif";
         ctx.translate(130 + Math.cos(angle + arc / 2) * 88, 130 + Math.sin(angle + arc / 2) * 88);
         ctx.rotate(angle + arc / 2 + Math.PI / 2);
         
         const rawName = pool30Dishes[i].name;
-        const text = rawName.length > 9 ? rawName.substring(0, 8) + '..' : rawName;
+        const text = rawName.length > 8 ? rawName.substring(0, 7) + '..' : rawName;
         ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
         ctx.restore();
       }
@@ -806,68 +795,71 @@
       }, 400);
     }
 
-    // 8. LỌC DANH MỤC
-    function filterCategory(cat, btn) {
-      currentFilter = cat;
-      document.querySelectorAll('.cat-pill').forEach(b => {
-        b.className = 'cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0';
+    // 8. HỆ THỐNG LỌC ĐỒNG THỜI: DANH MỤC & MỨC GIÁ
+    function applyCombinedFilters() {
+      filteredList = fullDatabase300.filter(dish => {
+        const matchCat = (currentCategory === 'all' || dish.cat === currentCategory);
+        const matchPrice = (currentPriceTier === 'all' || dish.priceTier === currentPriceTier);
+        return matchCat && matchPrice;
       });
-      if (btn) btn.className = 'cat-pill active px-3 py-1.5 rounded-xl font-bold bg-[#ffd700] text-black border-2 border-black hard-shadow flex-shrink-0';
 
-      filteredList = (cat === 'all') ? [...fullDatabase300] : fullDatabase300.filter(f => f.cat === cat);
+      // Cập nhật text badge số lượng món
+      const catNames = {
+        all: 'Tất cả', nuoc: 'Đồ Nước', kho: 'Cơm & Khô', ngoai: 'Món Ngoại', vat: 'Ăn Vặt', healthy: 'Healthy'
+      };
+      const priceNames = {
+        all: 'Mọi giá', tier1: '20k-100k', tier2: '100k-200k', tier3: '200k-500k', tier4: '500k-2TR'
+      };
+      
+      const badge = document.getElementById('activeFilterBadge');
+      if (badge) {
+        badge.innerHTML = `🎯 Lọc: <span class="text-[#ffd700] font-bold">${catNames[currentCategory]}</span> • <span class="text-[#00f0ff] font-bold">${priceNames[currentPriceTier]}</span> (<span class="text-white">${filteredList.length} món</span>)`;
+      }
+
+      // Tự động làm mới dữ liệu trên cả 10 thẻ và vòng quay 30 món
       load10CardsData();
       shuffle30Pool();
-      renderSwipeCard(filteredList[0]);
     }
 
-    function switchView(view) {
-      const cfSec = document.getElementById('cfSection');
-      const rouletteSec = document.getElementById('rouletteSection');
-      const swipeSec = document.getElementById('swipeSection');
+    function filterCategory(catKey, btn) {
+      currentCategory = catKey;
+      document.querySelectorAll('.cat-pill').forEach(b => {
+        b.className = 'cat-pill px-3 py-1.5 rounded-xl font-bold bg-[#1b1f2d] text-gray-300 border-2 border-black hard-shadow flex-shrink-0 transition-all';
+      });
+      btn.className = 'cat-pill active px-3 py-1.5 rounded-xl font-bold bg-[#ffd700] text-black border-2 border-black hard-shadow flex-shrink-0 transition-all';
+      applyCombinedFilters();
+    }
 
-      const navCF = document.getElementById('nav-cf');
-      const navRoulette = document.getElementById('nav-roulette');
-      const navSwipe = document.getElementById('nav-swipe');
+    function filterPrice(tierKey, btn) {
+      currentPriceTier = tierKey;
+      document.querySelectorAll('.price-pill').forEach(b => {
+        b.className = 'price-pill px-2.5 py-1 rounded-lg font-bold bg-[#1b1f2d] text-gray-400 border-2 border-black hard-shadow flex-shrink-0 transition-all';
+      });
+      btn.className = 'price-pill active px-2.5 py-1 rounded-lg font-black bg-[#00f0ff] text-black border-2 border-black hard-shadow flex-shrink-0 transition-all';
+      applyCombinedFilters();
+    }
 
-      cfSec.classList.add('hidden');
-      rouletteSec.classList.add('hidden');
-      swipeSec.classList.add('hidden');
+    // 9. CHUYỂN CHẾ ĐỘ CHƠI
+    function switchView(mode) {
+      const cfSec = document.getElementById('cfModeSection');
+      const wheelSec = document.getElementById('wheelModeSection');
+      const btnCF = document.getElementById('tabBtnCF');
+      const btnWheel = document.getElementById('tabBtnWheel');
 
-      navCF.className = 'px-2.5 py-1 rounded-lg font-black bg-[#1b1f2b] text-gray-300';
-      navRoulette.className = 'px-2.5 py-1 rounded-lg font-black bg-[#1b1f2b] text-gray-300';
-      navSwipe.className = 'px-2.5 py-1 rounded-lg font-black bg-[#1b1f2b] text-gray-300';
-
-      if (view === 'cf-cards') {
+      if (mode === 'cf') {
         cfSec.classList.remove('hidden');
-        navCF.className = 'px-2.5 py-1 rounded-lg font-black bg-[#ffd700] text-black hard-shadow';
-      } else if (view === 'roulette') {
-        rouletteSec.classList.remove('hidden');
-        navRoulette.className = 'px-2.5 py-1 rounded-lg font-black bg-[#ffd700] text-black hard-shadow';
-        drawRoulette30();
-      } else if (view === 'swipe') {
-        swipeSec.classList.remove('hidden');
-        navSwipe.className = 'px-2.5 py-1 rounded-lg font-black bg-[#ffd700] text-black hard-shadow';
-        renderSwipeCard(filteredList[0]);
+        wheelSec.classList.add('hidden');
+        btnCF.className = "flex-1 py-2 text-xs font-black rounded-xl border-2 border-black hard-shadow transition-all bg-[#00f0ff] text-black flex items-center justify-center space-x-1";
+        btnWheel.className = "flex-1 py-2 text-xs font-black rounded-xl border-2 border-black hard-shadow transition-all bg-[#151922] text-gray-400 hover:text-white flex items-center justify-center space-x-1";
+      } else {
+        cfSec.classList.add('hidden');
+        wheelSec.classList.remove('hidden');
+        btnWheel.className = "flex-1 py-2 text-xs font-black rounded-xl border-2 border-black hard-shadow transition-all bg-[#ffd700] text-black flex items-center justify-center space-x-1";
+        btnCF.className = "flex-1 py-2 text-xs font-black rounded-xl border-2 border-black hard-shadow transition-all bg-[#151922] text-gray-400 hover:text-white flex items-center justify-center space-x-1";
+        setTimeout(() => {
+          drawRoulette30();
+        }, 50);
       }
-    }
-
-    function renderSwipeCard(item) {
-      if (!item) return;
-      document.getElementById('cardTitle').innerText = item.name;
-      document.getElementById('cardCategory').innerText = item.catName;
-      document.getElementById('cardPrice').innerText = item.price;
-      document.getElementById('cardOrigin').innerText = item.origin;
-      document.getElementById('cardImage').style.backgroundImage = `url('${item.img}')`;
-    }
-
-    function triggerSwipe(dir) {
-      const card = document.getElementById('foodCard');
-      card.classList.add(dir === 'right' ? 'card-swipe-right' : 'card-swipe-left');
-      setTimeout(() => {
-        card.classList.remove('card-swipe-right', 'card-swipe-left');
-        const rand = filteredList[Math.floor(Math.random() * filteredList.length)];
-        renderSwipeCard(rand);
-      }, 300);
     }
 
     // Khởi tạo ứng dụng
